@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Particle {
   id: number;
@@ -10,9 +10,33 @@ interface Particle {
   color: "gold" | "electric" | "muted";
 }
 
-const AnimatedBackground = ({ variant = "hero" }: { variant?: "hero" | "dashboard" | "subtle" }) => {
+type BgVariant = "hero" | "features" | "navigator" | "dashboard" | "storyarc";
+
+const bgImages: Record<BgVariant, string> = {
+  hero: "/images/bg-hero.jpg",
+  features: "/images/bg-hero.jpg",
+  navigator: "/images/bg-navigator.jpg",
+  dashboard: "/images/bg-dashboard.jpg",
+  storyarc: "/images/bg-storyarc.jpg",
+};
+
+const AnimatedBackground = ({ variant = "hero" }: { variant?: BgVariant }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [offsetY, setOffsetY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (ref.current) {
+        const rect = ref.current.getBoundingClientRect();
+        setOffsetY(rect.top * -0.15);
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const [particles] = useState<Particle[]>(() =>
-    Array.from({ length: variant === "hero" ? 30 : 15 }, (_, i) => ({
+    Array.from({ length: 20 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
@@ -24,48 +48,65 @@ const AnimatedBackground = ({ variant = "hero" }: { variant?: "hero" | "dashboar
   );
 
   const colorMap = {
-    gold: "bg-gold/30",
-    electric: "bg-electric/20",
-    muted: "bg-muted-foreground/10",
+    gold: "bg-gold/40",
+    electric: "bg-electric/30",
+    muted: "bg-muted-foreground/15",
   };
 
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Gradient overlay */}
+    <div ref={ref} className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Background image with parallax + Ken Burns effect */}
       <div
-        className="absolute inset-0 animate-bg-shift opacity-40"
+        className="absolute inset-[-80px] animate-ken-burns"
+        style={{
+          backgroundImage: `url(${bgImages[variant]})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          transform: `translateY(${offsetY}px)`,
+          willChange: "transform",
+        }}
+      />
+
+      {/* Dark overlay for readability */}
+      <div
+        className="absolute inset-0"
         style={{
           background:
             variant === "hero"
-              ? "linear-gradient(135deg, hsl(222 47% 4%) 0%, hsl(222 47% 10%) 30%, hsl(38 40% 10%) 60%, hsl(210 50% 8%) 100%)"
-              : variant === "dashboard"
-              ? "linear-gradient(180deg, hsl(222 47% 5%) 0%, hsl(222 47% 8%) 50%, hsl(210 30% 7%) 100%)"
-              : "linear-gradient(180deg, hsl(222 47% 6%) 0%, hsl(222 47% 7%) 100%)",
+              ? "linear-gradient(180deg, hsl(222 47% 4% / 0.55) 0%, hsl(222 47% 4% / 0.7) 40%, hsl(222 47% 4% / 0.85) 100%)"
+              : "linear-gradient(180deg, hsl(222 47% 4% / 0.7) 0%, hsl(222 47% 4% / 0.8) 50%, hsl(222 47% 4% / 0.88) 100%)",
+        }}
+      />
+
+      {/* Animated gradient overlay */}
+      <div
+        className="absolute inset-0 animate-bg-shift opacity-30"
+        style={{
+          background:
+            "linear-gradient(135deg, hsl(38 92% 55% / 0.06) 0%, transparent 30%, hsl(210 100% 55% / 0.05) 60%, transparent 100%)",
           backgroundSize: "400% 400%",
         }}
       />
 
       {/* Grid lines */}
       <div
-        className="absolute inset-0 opacity-[0.03]"
+        className="absolute inset-0 opacity-[0.025]"
         style={{
           backgroundImage:
-            "linear-gradient(hsl(38 92% 55% / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(38 92% 55% / 0.3) 1px, transparent 1px)",
+            "linear-gradient(hsl(38 92% 55% / 0.4) 1px, transparent 1px), linear-gradient(90deg, hsl(38 92% 55% / 0.4) 1px, transparent 1px)",
           backgroundSize: "80px 80px",
         }}
       />
 
       {/* Scan line effect */}
-      {variant === "hero" && (
-        <div className="absolute inset-0">
-          <div
-            className="absolute w-full h-px animate-scan-line"
-            style={{
-              background: "linear-gradient(90deg, transparent, hsl(38 92% 55% / 0.15), transparent)",
-            }}
-          />
-        </div>
-      )}
+      <div className="absolute inset-0">
+        <div
+          className="absolute w-full h-[2px] animate-scan-line"
+          style={{
+            background: "linear-gradient(90deg, transparent, hsl(38 92% 55% / 0.12), transparent)",
+          }}
+        />
+      </div>
 
       {/* Floating particles */}
       {particles.map((p) => (
@@ -84,13 +125,13 @@ const AnimatedBackground = ({ variant = "hero" }: { variant?: "hero" | "dashboar
         />
       ))}
 
-      {/* Large ambient orbs */}
+      {/* Ambient orbs */}
       <div
-        className="absolute w-[600px] h-[600px] rounded-full animate-pulse-glow"
+        className="absolute w-[500px] h-[500px] rounded-full animate-pulse-glow"
         style={{
           top: "-10%",
           right: "-10%",
-          background: "radial-gradient(circle, hsl(38 92% 55% / 0.08), transparent 70%)",
+          background: "radial-gradient(circle, hsl(38 92% 55% / 0.07), transparent 70%)",
         }}
       />
       <div
@@ -98,8 +139,16 @@ const AnimatedBackground = ({ variant = "hero" }: { variant?: "hero" | "dashboar
         style={{
           bottom: "10%",
           left: "-5%",
-          background: "radial-gradient(circle, hsl(210 100% 55% / 0.06), transparent 70%)",
+          background: "radial-gradient(circle, hsl(210 100% 55% / 0.05), transparent 70%)",
           animationDelay: "2s",
+        }}
+      />
+
+      {/* Vignette */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: "radial-gradient(ellipse at center, transparent 40%, hsl(222 47% 4% / 0.6) 100%)",
         }}
       />
     </div>
