@@ -31,7 +31,7 @@ const sentimentDot = {
 const StoryArcSection = () => {
   return (
     <section id="tracker" className="relative py-32 px-6">
-      <AnimatedBackground variant="subtle" />
+      <AnimatedBackground variant="storyarc" />
 
       <div className="relative z-10 max-w-5xl mx-auto">
         <motion.div

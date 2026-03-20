@@ -19,7 +19,7 @@ const followUpQuestions = [
 const NavigatorSection = () => {
   return (
     <section id="navigator" className="relative py-32 px-6">
-      <AnimatedBackground variant="dashboard" />
+      <AnimatedBackground variant="navigator" />
 
       <div className="relative z-10 max-w-6xl mx-auto">
         <motion.div
