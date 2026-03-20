@@ -1,14 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import heroVideo from "@/assets/bg-news-hero.mp4.asset.json";
-import dashboardVideo from "@/assets/bg-news-dashboard.mp4.asset.json";
-import articleVideo from "@/assets/bg-news-article.mp4.asset.json";
 
 type VideoVariant = "hero" | "dashboard" | "article";
 
 const videoSources: Record<VideoVariant, string> = {
-  hero: heroVideo.url,
-  dashboard: dashboardVideo.url,
-  article: articleVideo.url,
+  hero: "/videos/hero.mp4",
+  dashboard: "/videos/dashboard.mp4",
+  article: "/videos/article.mp4",
 };
 
 interface Particle {
@@ -55,61 +52,68 @@ const VideoBackground = ({ variant = "hero" }: { variant?: VideoVariant }) => {
   };
 
   return (
-    <div ref={ref} className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Video layer with parallax */}
-      <div
-        className="absolute inset-[-40px]"
-        style={{ transform: `translateY(${offsetY}px)`, willChange: "transform" }}
-      >
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover"
-          style={{ minHeight: "calc(100% + 80px)" }}
-        >
-          <source src={videoSources[variant]} type="video/mp4" />
-        </video>
-      </div>
+    <div ref={ref} className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
 
-      {/* Dark overlay */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: variant === "hero"
-            ? "linear-gradient(180deg, hsl(var(--background) / 0.4) 0%, hsl(var(--background) / 0.65) 40%, hsl(var(--background) / 0.85) 100%)"
-            : "linear-gradient(180deg, hsl(var(--background) / 0.6) 0%, hsl(var(--background) / 0.75) 50%, hsl(var(--background) / 0.9) 100%)",
-        }}
-      />
+      {/* 🎬 VIDEO BACKGROUND */}
+     {/* 🎬 BASE VIDEO (topvdo) */}
+<div
+  className="absolute inset-[-40px] z-0"
+  style={{
+    transform: `translateY(${offsetY}px)`,
+    willChange: "transform",
+  }}
+>
+  <video
+    autoPlay
+    loop
+    muted
+    playsInline
+    className="w-full h-full object-cover"
+  >
+    <source src="/videos/topvdo.mp4" type="video/mp4" />
+  </video>
+</div>
 
-      {/* Animated gradient shimmer */}
+{/* ✨ GLOW VIDEO (bottomvdo) */}
+<video
+  autoPlay
+  loop
+  muted
+  playsInline
+  className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-screen blur-sm z-10"
+>
+  <source src="/videos/bottomvdo.mp4" type="video/mp4" />
+</video>
+
+{/* 🌑 DARK OVERLAY */}
+<div className="absolute inset-0 bg-black/10 z-20" />
+
+      {/* ✨ GRADIENT SHIMMER */}
       <div
         className="absolute inset-0 animate-bg-shift opacity-20"
         style={{
-          background: "linear-gradient(135deg, hsl(var(--gold) / 0.08) 0%, transparent 30%, hsl(var(--electric) / 0.06) 60%, transparent 100%)",
+          background:
+            "linear-gradient(135deg, rgba(255,200,0,0.08) 0%, transparent 30%, rgba(0,150,255,0.06) 60%, transparent 100%)",
           backgroundSize: "400% 400%",
         }}
       />
 
-      {/* Grid lines */}
+      {/* 🧱 GRID */}
       <div
         className="absolute inset-0 opacity-[0.02]"
         style={{
-          backgroundImage: "linear-gradient(hsl(var(--gold) / 0.5) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--gold) / 0.5) 1px, transparent 1px)",
+          backgroundImage:
+            "linear-gradient(rgba(255,200,0,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,200,0,0.4) 1px, transparent 1px)",
           backgroundSize: "80px 80px",
         }}
       />
 
-      {/* Scan line */}
+      {/* 📡 SCAN LINE */}
       <div className="absolute inset-0">
-        <div
-          className="absolute w-full h-[1px] animate-scan-line"
-          style={{ background: "linear-gradient(90deg, transparent, hsl(var(--gold) / 0.15), transparent)" }}
-        />
+        <div className="absolute w-full h-[1px] animate-scan-line bg-gradient-to-r from-transparent via-yellow-400/20 to-transparent" />
       </div>
 
-      {/* Floating particles */}
+      {/* ✨ PARTICLES */}
       {particles.map((p) => (
         <div
           key={p.id}
@@ -126,29 +130,26 @@ const VideoBackground = ({ variant = "hero" }: { variant?: VideoVariant }) => {
         />
       ))}
 
-      {/* Ambient orbs */}
-      <div
-        className="absolute w-[500px] h-[500px] rounded-full animate-pulse-glow"
+      {/* 🌟 ORBS */}
+      <div className="absolute w-[500px] h-[500px] rounded-full animate-pulse-glow top-[-10%] right-[-10%]"
         style={{
-          top: "-10%",
-          right: "-10%",
-          background: "radial-gradient(circle, hsl(var(--gold) / 0.06), transparent 70%)",
+          background: "radial-gradient(circle, rgba(255,200,0,0.06), transparent 70%)",
         }}
       />
-      <div
-        className="absolute w-[400px] h-[400px] rounded-full animate-pulse-glow"
+      <div className="absolute w-[400px] h-[400px] rounded-full animate-pulse-glow bottom-[10%] left-[-5%]"
         style={{
-          bottom: "10%",
-          left: "-5%",
-          background: "radial-gradient(circle, hsl(var(--electric) / 0.04), transparent 70%)",
+          background: "radial-gradient(circle, rgba(0,150,255,0.04), transparent 70%)",
           animationDelay: "2s",
         }}
       />
 
-      {/* Vignette */}
+      {/* 🌑 VIGNETTE */}
       <div
         className="absolute inset-0"
-        style={{ background: "radial-gradient(ellipse at center, transparent 40%, hsl(var(--background) / 0.7) 100%)" }}
+        style={{
+          background:
+            "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.7) 100%)",
+        }}
       />
     </div>
   );
