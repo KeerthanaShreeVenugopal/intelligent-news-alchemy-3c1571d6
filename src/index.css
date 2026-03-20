@@ -112,6 +112,10 @@
   50% { opacity: 1; }
 }
 
+.animate-ken-burns {
+  animation: ken-burns 25s ease-in-out infinite;
+}
+
 .animate-bg-shift {
   animation: bg-shift 15s ease infinite;
   background-size: 400% 400%;
