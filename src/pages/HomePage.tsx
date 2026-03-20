@@ -19,92 +19,102 @@ const HomePage = () => {
   const [selectedType, setSelectedType] = useState("investor");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const filtered = selectedCategory === "All"
-    ? newsArticles
-    : newsArticles.filter((a) => a.category === selectedCategory);
+  const filtered =
+    selectedCategory === "All"
+      ? newsArticles
+      : newsArticles.filter((a) => a.category === selectedCategory);
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      {/* Hero */}
-      <section className="relative min-h-[85vh] flex flex-col justify-center pt-16">
+      {/* 🔥 HERO + FEED CONTINUOUS SECTION */}
+      <section className="relative w-full min-h-screen overflow-hidden">
+
+        {/* 🎬 SINGLE BACKGROUND (shared) */}
         <VideoBackground variant="hero" />
-        <NewsTicker />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-16 text-center">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <span className="inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-widest uppercase border border-gold/30 text-gold mb-6" style={{ background: "hsl(var(--gold) / 0.08)" }}>
-              AI-Powered News Platform
-            </span>
-          </motion.div>
+        {/* 🔝 HERO CONTENT */}
+        <div className="relative z-10 flex flex-col justify-center pt-16 min-h-[75vh]">
+          <NewsTicker />
 
-          <motion.h1
-            className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[0.95] mb-5 font-['Space_Grotesk']"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.1 }}
-          >
-            News That <span className="text-gradient-gold">Knows</span>
-            <br />
-            <span className="text-gradient-electric">You</span>
-          </motion.h1>
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-16 pb-6 text-center">
+            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+              <span className="inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-widest uppercase border border-gold/30 text-gold mb-6" style={{ background: "hsl(var(--gold) / 0.08)" }}>
+                AI-Powered News Platform
+              </span>
+            </motion.div>
 
-          <motion.p
-            className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.25 }}
-          >
-            A fundamentally different news experience — AI briefings, interactive story arcs, and broadcast-quality video, all personalized for you.
-          </motion.p>
+            <motion.h1
+              className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[0.95] mb-5 font-['Space_Grotesk']"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.1 }}
+            >
+              News That <span className="text-gradient-gold">Knows</span>
+              <br />
+              <span className="text-gradient-electric">You</span>
+            </motion.h1>
 
-          {/* User type selector */}
-          <motion.div
-            className="flex flex-col sm:flex-row gap-3 justify-center max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            {userTypes.map((type) => {
-              const Icon = type.icon;
-              const active = selectedType === type.id;
-              return (
-                <button
-                  key={type.id}
-                  onClick={() => setSelectedType(type.id)}
-                  className={`flex items-center gap-3 px-5 py-3.5 rounded-xl text-left transition-all ${
-                    active
-                      ? "glass border-gold/40 shadow-[0_0_20px_-4px_hsl(var(--gold)_/_0.2)]"
-                      : "glass hover:border-muted-foreground/30"
-                  }`}
-                >
-                  <Icon className={`w-5 h-5 ${active ? "text-gold" : "text-muted-foreground"}`} />
-                  <div>
-                    <div className={`text-sm font-semibold ${active ? "text-gold" : "text-foreground"}`}>{type.label}</div>
-                    <div className="text-xs text-muted-foreground">{type.desc}</div>
-                  </div>
-                </button>
-              );
-            })}
-          </motion.div>
+            <motion.p
+              className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.25 }}
+            >
+              A fundamentally different news experience — AI briefings, interactive story arcs, and broadcast-quality video, all personalized for you.
+            </motion.p>
+
+            {/* User type selector */}
+            <motion.div
+              className="flex flex-col sm:flex-row gap-3 justify-center max-w-2xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              {userTypes.map((type) => {
+                const Icon = type.icon;
+                const active = selectedType === type.id;
+                return (
+                  <button
+                    key={type.id}
+                    onClick={() => setSelectedType(type.id)}
+                    className={`flex items-center gap-3 px-5 py-3.5 rounded-xl text-left transition-all ${
+                      active
+                        ? "glass border-gold/40 shadow-[0_0_20px_-4px_hsl(var(--gold)_/_0.2)]"
+                        : "glass hover:border-muted-foreground/30"
+                    }`}
+                  >
+                    <Icon className={`w-5 h-5 ${active ? "text-gold" : "text-muted-foreground"}`} />
+                    <div>
+                      <div className={`text-sm font-semibold ${active ? "text-gold" : "text-foreground"}`}>
+                        {type.label}
+                      </div>
+                      <div className="text-xs text-muted-foreground">{type.desc}</div>
+                    </div>
+                  </button>
+                );
+              })}
+            </motion.div>
+          </div>
         </div>
-      </section>
 
-      {/* News Feed */}
-      <section className="relative py-20">
-        <VideoBackground variant="dashboard" />
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
+        {/* 📰 FEED CONTENT (NO SEPARATE SECTION) */}
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pb-20">
+
+          {/* Title */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-10"
+            className="text-center mb-10 mt-10"
           >
             <h2 className="text-3xl sm:text-4xl font-bold font-['Space_Grotesk'] mb-3">
               Your <span className="text-gradient-gold">Personalized</span> Feed
             </h2>
-            <p className="text-muted-foreground">Curated for your interests as a {selectedType}</p>
+            <p className="text-muted-foreground">
+              Curated for your interests as a {selectedType}
+            </p>
           </motion.div>
 
           {/* Category filter */}
