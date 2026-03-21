@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react";
+import heroVideo from "../../public/videos/hero.mp4.asset.json";
+import dashboardVideo from "../../public/videos/dashboard.mp4.asset.json";
+import articleVideo from "../../public/videos/article.mp4.asset.json";
 
 type VideoVariant = "hero" | "dashboard" | "article";
 
 const videoSources: Record<VideoVariant, string> = {
-  hero: "/videos/hero.mp4",
-  dashboard: "/videos/dashboard.mp4",
-  article: "/videos/article.mp4",
+  hero: heroVideo.url,
+  dashboard: dashboardVideo.url,
+  article: articleVideo.url,
 };
 
 interface Particle {
