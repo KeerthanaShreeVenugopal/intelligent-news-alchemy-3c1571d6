@@ -1,128 +1,66 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ChevronDown, Send, Brain, Zap, Users } from "lucide-react";
+import { Send } from "lucide-react";
 import VideoBackground from "@/components/VideoBackground";
 import Navbar from "@/components/Navbar";
-import { briefingTopics, briefingData } from "@/data/newsData";
 
 const BriefingsPage = () => {
-  const [selectedTopic, setSelectedTopic] = useState("budget");
-  const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [briefingText, setBriefingText] = useState("");
   const [followUp, setFollowUp] = useState("");
-  const data = briefingData[selectedTopic];
+  const [chatResponse, setChatResponse] = useState("");
 
-  const sectionIcons: Record<string, typeof Brain> = {
-    "Economic Impact": Zap,
-    "Industry Impact": Brain,
-    "Key Players": Users,
-  };
+  useEffect(() => {
+    const data = localStorage.getItem("briefing");
+    if (data) setBriefingText(data);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
+
       <section className="relative min-h-screen pt-20">
         <VideoBackground variant="dashboard" />
 
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="text-center mb-8 sm:mb-10">
-              <span className="inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-widest uppercase border border-electric/40 text-electric mb-4" style={{ background: "hsl(var(--electric) / 0.12)" }}>
-                Intelligence Briefing
-              </span>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-['Space_Grotesk'] text-foreground">
-                AI <span className="text-gradient-electric">Briefing</span>
-              </h1>
-              <p className="text-foreground/65 mt-2 text-sm sm:text-base">Deep analysis synthesized from multiple sources</p>
+        <div className="relative z-10 max-w-4xl mx-auto px-4 py-10">
+
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+
+            <h1 className="text-4xl font-bold mb-6 text-center">
+              🧠 AI Briefing
+            </h1>
+
+            {/* 🔥 SUMMARY */}
+            <div className="glass p-6 rounded-xl mb-6">
+              <h2 className="text-gold font-bold mb-3">Summary</h2>
+              <p className="text-sm whitespace-pre-wrap">
+                {briefingText}
+              </p>
             </div>
 
-            {/* Topic selector */}
-            <div className="flex justify-center gap-2 mb-8 sm:mb-10 flex-wrap px-2">
-              {briefingTopics.map((topic) => (
-                <button
-                  key={topic.id}
-                  onClick={() => setSelectedTopic(topic.id)}
-                  className={`px-4 sm:px-5 py-2 rounded-full text-sm font-medium transition-all ${
-                    selectedTopic === topic.id
-                      ? "bg-electric text-accent-foreground shadow-lg"
-                      : "glass text-foreground/60 hover:text-foreground"
-                  }`}
-                >
-                  {topic.label}
-                </button>
-              ))}
-            </div>
+            {/* 💬 CHAT */}
+            <div className="glass p-6 rounded-xl">
+              <h3 className="mb-3">Ask AI</h3>
 
-            {/* Summary */}
-            <div className="glass rounded-2xl p-5 sm:p-6 mb-5 sm:mb-6 border-electric/25">
-              <h3 className="text-sm font-semibold text-electric uppercase tracking-wider mb-3 flex items-center gap-2">
-                <Brain className="w-4 h-4" /> Executive Summary
-              </h3>
-              <p className="text-foreground/85 leading-relaxed text-sm sm:text-base">{data.summary}</p>
-            </div>
-
-            {/* Highlights */}
-            <div className="glass rounded-2xl p-5 sm:p-6 mb-5 sm:mb-6">
-              <h3 className="text-lg font-semibold font-['Space_Grotesk'] mb-4 text-foreground">Key Highlights</h3>
-              <ul className="space-y-3">
-                {data.highlights.map((h, i) => (
-                  <li key={i} className="flex items-start gap-3 text-sm text-foreground/75">
-                    <div className="w-6 h-6 rounded-full bg-electric/15 text-electric flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
-                      {i + 1}
-                    </div>
-                    {h}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Accordion sections */}
-            <div className="space-y-3 mb-6 sm:mb-8">
-              {data.sections.map((section) => {
-                const Icon = sectionIcons[section.title] || Brain;
-                const isOpen = expandedSection === section.title;
-                return (
-                  <div key={section.title} className="glass rounded-2xl overflow-hidden">
-                    <button
-                      onClick={() => setExpandedSection(isOpen ? null : section.title)}
-                      className="w-full flex items-center justify-between p-4 sm:p-5 text-left"
-                    >
-                      <div className="flex items-center gap-3">
-                        <Icon className="w-5 h-5 text-electric" />
-                        <span className="font-semibold font-['Space_Grotesk'] text-foreground text-sm sm:text-base">{section.title}</span>
-                      </div>
-                      <ChevronDown className={`w-5 h-5 text-foreground/50 transition-transform ${isOpen ? "rotate-180" : ""}`} />
-                    </button>
-                    {isOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        className="px-4 sm:px-5 pb-4 sm:pb-5"
-                      >
-                        <p className="text-sm text-foreground/70 leading-relaxed border-t border-border/50 pt-4">
-                          {section.content}
-                        </p>
-                      </motion.div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Follow-up */}
-            <div className="glass rounded-2xl p-5 sm:p-6">
-              <h3 className="text-sm font-semibold mb-3 text-foreground">Ask a follow-up question</h3>
               <div className="flex gap-2">
                 <input
                   value={followUp}
                   onChange={(e) => setFollowUp(e.target.value)}
-                  placeholder="What are the implications for small-cap stocks?"
-                  className="flex-1 px-4 py-3 rounded-xl bg-secondary/60 border border-border text-sm text-foreground placeholder:text-foreground/40 focus:outline-none focus:border-electric/50"
+                  className="flex-1 px-4 py-2 rounded-lg bg-secondary"
+                  placeholder="Ask anything..."
                 />
-                <button className="px-4 py-3 rounded-xl text-sm font-medium text-accent-foreground shrink-0" style={{ background: "var(--gradient-electric)" }}>
-                  <Send className="w-4 h-4" />
+
+                <button className="bg-gold px-4 rounded-lg">
+                  <Send size={16} />
                 </button>
               </div>
+
+              {chatResponse && (
+                <div className="mt-4">
+                  <p>{chatResponse}</p>
+                </div>
+              )}
             </div>
+
           </motion.div>
         </div>
       </section>

@@ -1,20 +1,26 @@
 const express = require("express");
 const router = express.Router();
-const axios = require("axios");
+const OpenAI = require("openai");
+
+// 🔥 Groq client
+const client = new OpenAI({
+  baseURL: "https://api.groq.com/openai/v1",
+  apiKey: process.env.GROQ_API_KEY,
+});
 
 // Dummy data
 const news = [
   {
     topic: "RBI Policy",
-    content: "RBI increased repo rate to control inflation."
+    content: "The Reserve Bank increased repo rate to control inflation."
   },
   {
     topic: "RBI Policy",
-    content: "Inflation is rising across sectors."
+    content: "Inflation is rising across sectors affecting consumers."
   },
   {
     topic: "RBI Policy",
-    content: "Loan EMIs may increase."
+    content: "Banks may increase lending rates leading to higher EMIs."
   }
 ];
 
@@ -27,39 +33,79 @@ router.post("/briefing", async (req, res) => {
     const related = news.filter(n => n.topic === topic);
     const combinedText = related.map(n => n.content).join("\n");
 
-    const prompt = `
+    const response = await client.chat.completions.create({
+      model: "llama-3.1-8b-instant",
+      messages: [
+        {
+          role: "user",
+          content: `
 Create a structured news briefing for a ${userType}.
 
-ONLY focus on that user.
+ONLY for this user type.
 
-Give:
-Summary
-Key Themes
-Impact
-What Next
+Format:
+Summary:
+...
+
+Key Themes:
+- ...
+- ...
+
+Impact:
+...
+
+What Next:
+...
 
 Articles:
 ${combinedText}
-`;
-
-    const response = await axios.post(
-      "https://router.huggingface.co/hf-inference/models/...",
-      {
-        inputs: prompt
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.HF_API_KEY}`
+          `
         }
-      }
-    );
+      ],
+    });
 
     res.json({
-      briefing: response.data[0].generated_text
+      briefing: response.choices[0].message.content
     });
 
   } catch (err) {
-    console.error(err.response?.data || err.message);
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+// 💬 CHAT API
+router.post("/chat", async (req, res) => {
+  try {
+    const { article, question, userType } = req.body;
+
+    const response = await client.chat.completions.create({
+      model: "llama-3.1-8b-instant",
+      messages: [
+        {
+          role: "user",
+          content: `
+User type: ${userType}
+
+Article:
+${article}
+
+Question:
+${question}
+
+Answer clearly.
+          `
+        }
+      ],
+    });
+
+    res.json({
+      answer: response.choices[0].message.content
+    });
+
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
