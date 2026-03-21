@@ -38,11 +38,11 @@ const VideoBackground = ({ variant = "hero" }: { variant?: VideoVariant }) => {
   }, []);
 
   const [particles] = useState<Particle[]>(() =>
-    Array.from({ length: 18 }, (_, i) => ({
+    Array.from({ length: 14 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      size: Math.random() * 3 + 1,
+      size: Math.random() * 3.5 + 1.5,
       delay: Math.random() * 5,
       duration: Math.random() * 8 + 6,
       color: (i % 3 === 0 ? "gold" : i % 3 === 1 ? "electric" : "muted") as Particle["color"],
@@ -50,17 +50,17 @@ const VideoBackground = ({ variant = "hero" }: { variant?: VideoVariant }) => {
   );
 
   const colorMap = {
-    gold: "bg-gold/40",
-    electric: "bg-electric/30",
-    muted: "bg-muted-foreground/15",
+    gold: "bg-gold/50",
+    electric: "bg-electric/40",
+    muted: "bg-muted-foreground/20",
   };
 
   return (
     <div ref={ref} className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
 
-      {/* 🎬 PRIMARY VIDEO — variant-specific, full coverage */}
+      {/* PRIMARY VIDEO — brighter, full coverage */}
       <div
-        className="absolute inset-[-60px] z-0"
+        className="absolute inset-[-40px] z-0"
         style={{
           transform: `translateY(${offsetY}px) scale(1.05)`,
           willChange: "transform",
@@ -72,53 +72,53 @@ const VideoBackground = ({ variant = "hero" }: { variant?: VideoVariant }) => {
           loop
           muted
           playsInline
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover brightness-110"
         >
           <source src={videoSrc} type="video/mp4" />
         </video>
       </div>
 
-      {/* ✨ GLOW LAYER — second video blend for depth */}
+      {/* GLOW LAYER — brighter blend */}
       <video
         key={videoSrc + "-glow"}
         autoPlay
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-25 mix-blend-screen blur-[2px] z-10"
+        className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-screen blur-[2px] z-10 brightness-125"
       >
         <source src={videoSrc} type="video/mp4" />
       </video>
 
-      {/* 🌑 DARK OVERLAY for readability */}
-      <div className="absolute inset-0 bg-background/40 z-20" />
+      {/* DARK OVERLAY — reduced for brightness */}
+      <div className="absolute inset-0 bg-background/25 z-20" />
 
-      {/* ✨ GRADIENT SHIMMER */}
+      {/* GRADIENT SHIMMER — brighter */}
       <div
-        className="absolute inset-0 z-30 animate-bg-shift opacity-20"
+        className="absolute inset-0 z-30 animate-bg-shift opacity-30"
         style={{
           background:
-            "linear-gradient(135deg, hsl(var(--gold) / 0.1) 0%, transparent 30%, hsl(var(--electric) / 0.08) 60%, transparent 100%)",
+            "linear-gradient(135deg, hsl(var(--gold) / 0.15) 0%, transparent 30%, hsl(var(--electric) / 0.12) 60%, transparent 100%)",
           backgroundSize: "400% 400%",
         }}
       />
 
-      {/* 🧱 GRID overlay */}
+      {/* GRID overlay — slightly more visible */}
       <div
-        className="absolute inset-0 z-30 opacity-[0.025]"
+        className="absolute inset-0 z-30 opacity-[0.04]"
         style={{
           backgroundImage:
-            "linear-gradient(hsl(var(--gold) / 0.4) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--gold) / 0.4) 1px, transparent 1px)",
+            "linear-gradient(hsl(var(--gold) / 0.5) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--gold) / 0.5) 1px, transparent 1px)",
           backgroundSize: "80px 80px",
         }}
       />
 
-      {/* 📡 SCAN LINE */}
+      {/* SCAN LINE — brighter */}
       <div className="absolute inset-0 z-30">
-        <div className="absolute w-full h-[1px] animate-scan-line bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
+        <div className="absolute w-full h-[1px] animate-scan-line bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
       </div>
 
-      {/* ✨ PARTICLES */}
+      {/* PARTICLES */}
       {particles.map((p) => (
         <div
           key={p.id}
@@ -135,27 +135,27 @@ const VideoBackground = ({ variant = "hero" }: { variant?: VideoVariant }) => {
         />
       ))}
 
-      {/* 🌟 ORBS */}
+      {/* ORBS — brighter */}
       <div
         className="absolute w-[500px] h-[500px] rounded-full animate-pulse-glow top-[-10%] right-[-10%] z-30"
         style={{
-          background: "radial-gradient(circle, hsl(var(--gold) / 0.06), transparent 70%)",
+          background: "radial-gradient(circle, hsl(var(--gold) / 0.1), transparent 70%)",
         }}
       />
       <div
         className="absolute w-[400px] h-[400px] rounded-full animate-pulse-glow bottom-[10%] left-[-5%] z-30"
         style={{
-          background: "radial-gradient(circle, hsl(var(--electric) / 0.04), transparent 70%)",
+          background: "radial-gradient(circle, hsl(var(--electric) / 0.08), transparent 70%)",
           animationDelay: "2s",
         }}
       />
 
-      {/* 🌑 VIGNETTE */}
+      {/* VIGNETTE — softer to let more video through */}
       <div
         className="absolute inset-0 z-40"
         style={{
           background:
-            "radial-gradient(ellipse at center, transparent 40%, hsl(var(--background)) 100%)",
+            "radial-gradient(ellipse at center, transparent 50%, hsl(var(--background) / 0.85) 100%)",
         }}
       />
     </div>

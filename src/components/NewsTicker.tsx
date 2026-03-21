@@ -13,14 +13,14 @@ const tickerItems = [
 
 const NewsTicker = () => {
   return (
-    <div className="w-full overflow-hidden border-y border-border/50 bg-secondary/30">
+    <div className="w-full overflow-hidden border-y border-border/40 bg-secondary/40">
       <div className="animate-ticker flex whitespace-nowrap py-2.5">
         {[...tickerItems, ...tickerItems].map((item, i) => (
           <span key={i} className="mx-6 text-sm font-medium tracking-wide">
             <span className={item.positive ? "text-emerald-400" : "text-red-400"}>
               {item.text}
             </span>
-            <span className="mx-4 text-border">│</span>
+            <span className="mx-4 text-foreground/20">│</span>
           </span>
         ))}
       </div>
