@@ -10,26 +10,41 @@ import StoryTrackerPage from "./pages/StoryTrackerPage";
 import VideoStudioPage from "./pages/VideoStudioPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/NotFound";
+import Login from "@/pages/Login";
+import ProtectedRoute from "@/components/ProtectedRoute.tsx";
+import { AuthProvider } from "@/context/AuthContext";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/article/:id" element={<ArticlePage />} />
-          <Route path="/briefings" element={<BriefingsPage />} />
-          <Route path="/story-tracker" element={<StoryTrackerPage />} />
-          <Route path="/video-studio" element={<VideoStudioPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <AuthProvider>   {/* ✅ ADD THIS */}
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/article/:id" element={<ArticlePage />} />
+            <Route path="/briefings" element={<BriefingsPage />} />
+            <Route path="/story-tracker" element={<StoryTrackerPage />} />
+            <Route path="/video-studio" element={<VideoStudioPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="*" element={<NotFound />} />
+
+            {/* ✅ Protected Route */}
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>   {/* ✅ ADD THIS */}
   </QueryClientProvider>
 );
 
