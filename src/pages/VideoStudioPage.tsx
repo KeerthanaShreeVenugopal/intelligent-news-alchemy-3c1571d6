@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Play, Loader2, Video, Sparkles } from "lucide-react";
 import VideoBackground from "@/components/VideoBackground";
 import Navbar from "@/components/Navbar";
+import ArticleTabs from "@/components/ArticleTabs";
 
 const VideoStudioPage = () => {
   const [generating, setGenerating] = useState(false);
@@ -29,6 +30,10 @@ const VideoStudioPage = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
+      <section className="pt-20">
+        <ArticleTabs />
+        {/* Page content */}
+      
       <section className="relative min-h-screen pt-20">
         <VideoBackground variant="hero" />
 
@@ -111,6 +116,7 @@ const VideoStudioPage = () => {
             </div>
           </motion.div>
         </div>
+      </section>
       </section>
     </div>
   );

@@ -11,7 +11,8 @@ const NewsCard = ({ article, index }: { article: NewsArticle; index: number }) =
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.08 }}
     >
-      <Link to={`/article/${article.id}`}>
+      {/* <Link to={`/article/${article.id}`}> */}
+      <Link to={`/news/${article.id}`}>
         <div className="group relative glass rounded-2xl p-5 sm:p-6 h-full transition-all duration-300 hover:border-gold/40 hover:shadow-[0_8px_32px_-8px_hsl(38_95%_58%_/_0.2)]">
           {/* Category badge */}
           <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold border ${categoryColors[article.category]}`}>
