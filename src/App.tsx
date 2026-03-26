@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound";
 import Login from "@/pages/Login";
 import ProtectedRoute from "@/components/ProtectedRoute.tsx";
 import { AuthProvider } from "@/context/AuthContext";
+import GlobalBackground from "./components/GlobalBackground";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <GlobalBackground />
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/article/:id" element={<ArticlePage />} />

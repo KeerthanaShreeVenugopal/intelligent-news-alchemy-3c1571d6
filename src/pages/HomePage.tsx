@@ -1,8 +1,8 @@
-// ✅ ONLY UI ENHANCED VERSION (backend untouched)
+// ✅ ONLY UI ENHANCED VERSION (spacing fixed)
 
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import VideoBackground from "@/components/VideoBackground";
+import VideoBackground from "../components/VideoBackground";
 import Navbar from "@/components/Navbar";
 import NewsCard from "@/components/NewsCard";
 import NewsTicker from "@/components/NewsTicker";
@@ -76,23 +76,21 @@ const HomePage = () => {
       <Navbar />
 
       {/* HERO */}
-      <section className="relative min-h-[85vh] flex flex-col justify-center pt-16">
-        <VideoBackground variant="hero" />
+      <section className="relative min-h-[65vh] flex flex-col justify-center pt-10">
+        <VideoBackground  />
         <NewsTicker />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-4 py-16 text-center">
+        <div className="relative z-10 max-w-6xl mx-auto px-4 py-10 text-center">
 
-          {/* 🔥 NEW BADGE */}
-          <span className="inline-block px-4 py-1.5 rounded-full text-xs border border-gold/30 text-gold mb-6">
+          <span className="inline-block px-4 py-1.5 rounded-full text-xs border border-gold/30 text-gold mb-4">
             AI-Powered News Platform
           </span>
 
-          <motion.h1 className="text-5xl font-bold mb-5">
+          <motion.h1 className="text-5xl font-bold mb-4">
             News That <span className="text-gradient-gold">Knows You</span>
           </motion.h1>
 
-          {/* 🔥 NEW DESCRIPTION */}
-          <p className="text-muted-foreground mb-8">
+          <p className="text-muted-foreground mb-6">
             AI-powered briefings, interactive insights, and personalized news.
           </p>
 
@@ -120,33 +118,33 @@ const HomePage = () => {
             })}
           </div>
 
-          {/* 🔥 VIEWING TEXT */}
-          <div className="mt-4 text-sm text-muted-foreground">
+          {/* VIEWING TEXT */}
+          <div className="mt-2 text-sm text-muted-foreground">
             Viewing as <span className="text-gold capitalize">{selectedType}</span>
           </div>
         </div>
       </section>
 
       {/* NEWS */}
-      <section className="py-20">
-        <VideoBackground variant="dashboard" />
+      <section className="py-10">
+        <VideoBackground  />
 
         <div className="max-w-6xl mx-auto px-4">
 
-          {/* 🔥 TITLE */}
-          <div className="text-center mb-8">
+          {/* TITLE */}
+          <div className="text-center mb-4">
             <h2 className="text-3xl font-bold">
               AI News Feed for{" "}
               <span className="text-gold capitalize">{selectedType}</span>
             </h2>
 
-            <span className="px-3 py-1 text-xs rounded-full bg-gold/10 text-gold border mt-2 inline-block">
+            <span className="px-3 py-1 text-xs rounded-full bg-gold/10 text-gold border mt-1 inline-block">
               ⚡ AI Personalized
             </span>
           </div>
 
-          {/* 🔥 CATEGORY FILTER */}
-          <div className="flex justify-center gap-2 mb-10 flex-wrap">
+          {/* CATEGORY FILTER */}
+          <div className="flex justify-center gap-2 mb-6 flex-wrap">
             {categories.map((cat) => (
               <button
                 key={cat}
@@ -160,7 +158,7 @@ const HomePage = () => {
             ))}
           </div>
 
-          {/* 🔥 LOADING */}
+          {/* LOADING */}
           {loading && (
             <p className="text-center text-gold mb-4">
               ⏳ Generating AI insights...
