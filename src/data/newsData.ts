@@ -1,3 +1,10 @@
+export const categoryColors: Record<string, string> = {
+  Finance: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+  Startup: "bg-violet-500/20 text-violet-400 border-violet-500/30",
+  Tech: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+  Policy: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+};
+
 export interface NewsArticle {
   id: string;
   title: string;
@@ -8,6 +15,25 @@ export interface NewsArticle {
   readTime: string;
   author: string;
   image?: string;
+
+  // 🔥 STORY ARC
+  story?: {
+    timeline: {
+      date: string;
+      title: string;
+      sentiment: "positive" | "negative" | "neutral";
+      detail: string;
+    }[];
+    prediction: string;
+  };
+
+  // 🔥 AI Q&A
+  qa?: {
+    why: string;
+    impact: string;
+    future: string;
+    default: string;
+  };
 }
 
 export const newsArticles: NewsArticle[] = [
@@ -20,36 +46,103 @@ export const newsArticles: NewsArticle[] = [
     date: "Mar 18, 2026",
     readTime: "4 min",
     author: "Priya Sharma",
+
+    story: {
+      timeline: [
+        { date: "Now", title: "RBI holds rates", sentiment: "neutral", detail: "Market stable" },
+        { date: "Short Term", title: "Loan impact", sentiment: "positive", detail: "Stable EMIs" },
+        { date: "Future", title: "Policy shift possible", sentiment: "neutral", detail: "Depends on inflation" }
+      ],
+      prediction: "Interest rates likely to remain stable in near term."
+    },
+
+    qa: {
+      why: "RBI held rates due to inflation and global uncertainty.",
+      impact: "Stable rates help borrowers and businesses.",
+      future: "Rates may remain unchanged for upcoming quarters.",
+      default: "RBI balances growth and inflation."
+    }
   },
+
   {
     id: "2",
-    title: "Zepto Raises $500M in Pre-IPO Round at $8B Valuation",
+    title: "Zepto Raises $500M in Pre-IPO Round",
     summary: "Quick-commerce unicorn Zepto secures massive funding as it prepares for a public listing later this year.",
     category: "Startup",
     content: "Zepto, India's leading quick-commerce platform, has raised $500 million in a pre-IPO funding round that values the company at approximately $8 billion. The round was led by prominent global investors including DST Global, StepStone Group, and existing backers Glade Brook Capital and Nexus Venture Partners. CEO Aadit Palicha stated that the funds will be used to expand dark store infrastructure across tier-2 cities and invest in AI-driven inventory management systems. The company has seen its revenue grow 3x year-over-year, reaching an annualized GMV of $4 billion. Zepto plans to file its DRHP with SEBI by Q2 2026, targeting a listing on both BSE and NSE.",
     date: "Mar 17, 2026",
     readTime: "5 min",
     author: "Rohan Mehta",
+
+    story: {
+      timeline: [
+        { date: "Now", title: "Funding raised", sentiment: "positive", detail: "Strong demand" },
+        { date: "Short Term", title: "Expansion", sentiment: "positive", detail: "New cities" },
+        { date: "Future", title: "IPO", sentiment: "neutral", detail: "Public listing soon" }
+      ],
+      prediction: "Zepto likely to become major quick commerce leader."
+    },
+
+    qa: {
+      why: "To expand operations and logistics.",
+      impact: "Increases competition in quick commerce.",
+      future: "Zepto may go public soon.",
+      default: "Startup ecosystem growing fast."
+    }
   },
+
   {
     id: "3",
-    title: "India's Semiconductor Fab Construction Begins in Gujarat",
+    title: "India Semiconductor Fab Begins",
     summary: "The $15 billion chip fabrication facility marks India's entry into advanced semiconductor manufacturing.",
     category: "Tech",
     content: "Ground has been broken on India's first advanced semiconductor fabrication facility in Dholera, Gujarat, marking a pivotal moment in the country's quest for chip self-sufficiency. The $15 billion project, a joint venture between Tata Electronics and TSMC, aims to produce chips at the 28nm node initially, with plans to scale to 7nm within five years. Prime Minister Modi called it 'a historic step towards Atmanirbhar Bharat in technology.' The facility is expected to create over 20,000 direct jobs and spawn an ecosystem of ancillary suppliers. Industry experts note that while this puts India on the semiconductor map, it will still rely heavily on imports for cutting-edge chips used in AI and 5G applications.",
     date: "Mar 16, 2026",
     readTime: "6 min",
     author: "Ananya Desai",
+
+    story: {
+      timeline: [
+        { date: "Now", title: "Construction starts", sentiment: "positive", detail: "Big milestone" },
+        { date: "Short Term", title: "Jobs created", sentiment: "positive", detail: "Industrial growth" },
+        { date: "Future", title: "Chip independence", sentiment: "positive", detail: "Less imports" }
+      ],
+      prediction: "India may become global semiconductor hub."
+    },
+
+    qa: {
+      why: "To reduce dependency on imports.",
+      impact: "Boosts tech industry and jobs.",
+      future: "India could lead semiconductor manufacturing.",
+      default: "Important step for tech growth."
+    }
   },
+
   {
     id: "4",
-    title: "Union Budget 2026: Key Highlights for Businesses",
+    title: "Union Budget 2026 Highlights",
     summary: "Finance Minister unveils a growth-oriented budget with significant tax reforms and infrastructure spending.",
     category: "Policy",
     content: "Finance Minister Nirmala Sitharaman presented the Union Budget 2026-27 with a clear focus on boosting capital expenditure, simplifying the tax regime, and supporting India's manufacturing ambitions. Key highlights include a reduction in corporate tax for MSMEs from 25% to 22%, a new Production-Linked Incentive scheme for the electronics sector worth ₹50,000 crore, and increased allocation for national highways by 30%. The budget also introduced a Digital India Innovation Fund of ₹10,000 crore to support AI startups. Markets reacted positively, with the Sensex climbing 800 points in intra-day trade. However, economists flagged concerns about the fiscal deficit target of 4.5% of GDP, suggesting it may be challenging to achieve given the expanded spending plans.",
     date: "Mar 15, 2026",
     readTime: "7 min",
     author: "Vikram Singh",
+
+    story: {
+      timeline: [
+        { date: "Now", title: "Budget announced", sentiment: "positive", detail: "Markets rise" },
+        { date: "Short Term", title: "Tax changes", sentiment: "positive", detail: "Business boost" },
+        { date: "Future", title: "Economic growth", sentiment: "positive", detail: "GDP increase" }
+      ],
+      prediction: "Budget may accelerate India's economic growth."
+    },
+
+    qa: {
+      why: "To boost growth and investment.",
+      impact: "Improves infrastructure and business conditions.",
+      future: "Economy likely to grow faster.",
+      default: "Growth-focused budget."
+    }
   },
   {
     id: "5",
@@ -60,6 +153,22 @@ export const newsArticles: NewsArticle[] = [
     date: "Mar 14, 2026",
     readTime: "5 min",
     author: "Neha Kapoor",
+
+    story: {
+      timeline: [
+        { date: "Now", title: "OpenAI + Reliance partnership", sentiment: "positive", detail: "AI expansion across India" },
+        { date: "Short Term", title: "Jio AI rollout", sentiment: "positive", detail: "Millions get AI access" },
+        { date: "Future", title: "AI ecosystem growth", sentiment: "positive", detail: "India leads AI adoption" }
+      ],
+      prediction: "India could become one of the largest AI-powered economies."
+    },
+
+    qa: {
+      why: "To scale AI access across India's massive user base.",
+      impact: "Boosts AI adoption in telecom, enterprise, and consumers.",
+      future: "India may become a global AI leader.",
+      default: "AI expansion in India is accelerating rapidly."
+    },
   },
   {
     id: "6",
@@ -70,6 +179,22 @@ export const newsArticles: NewsArticle[] = [
     date: "Mar 13, 2026",
     readTime: "5 min",
     author: "Arjun Patel",
+
+    story: {
+      timeline: [
+        { date: "Now", title: "$20B investment announced", sentiment: "positive", detail: "Major renewable push" },
+        { date: "Short Term", title: "Solar & wind expansion", sentiment: "positive", detail: "Capacity increases" },
+        { date: "Future", title: "Green hydrogen scale", sentiment: "positive", detail: "Clean energy leadership" }
+      ],
+      prediction: "Adani could become a global renewable energy giant."
+    },
+
+    qa: {
+      why: "To lead renewable energy transition globally.",
+      impact: "Boosts clean energy supply and reduces emissions.",
+      future: "India may dominate green energy markets.",
+      default: "Renewable investments are increasing globally."
+    }
   },
   {
     id: "7",
@@ -80,6 +205,22 @@ export const newsArticles: NewsArticle[] = [
     date: "Mar 12, 2026",
     readTime: "4 min",
     author: "Siddharth Jain",
+
+    story: {
+      timeline: [
+        { date: "Now", title: "New IPO rules introduced", sentiment: "neutral", detail: "Focus on transparency" },
+        { date: "Short Term", title: "Stricter disclosures", sentiment: "positive", detail: "Investor protection" },
+        { date: "Future", title: "Stable IPO market", sentiment: "positive", detail: "Less risky listings" }
+      ],
+      prediction: "IPO market may become more stable but slower."
+    },
+
+    qa: {
+      why: "To protect retail investors and improve transparency.",
+      impact: "Reduces risk of overvalued IPOs.",
+      future: "Higher quality IPOs expected.",
+      default: "Regulation improves market trust."
+    }
   },
   {
     id: "8",
@@ -90,6 +231,22 @@ export const newsArticles: NewsArticle[] = [
     date: "Mar 11, 2026",
     readTime: "5 min",
     author: "Meera Rajendran",
+    story: {
+      timeline: [
+        { date: "Now", title: "New IPO rules introduced", sentiment: "neutral", detail: "Focus on transparency" },
+        { date: "Short Term", title: "Stricter disclosures", sentiment: "positive", detail: "Investor protection" },
+        { date: "Future", title: "Stable IPO market", sentiment: "positive", detail: "Less risky listings" }
+      ],
+      prediction: "IPO market may become more stable but slower."
+    },
+
+    qa: {
+      why: "To protect retail investors and improve transparency.",
+      impact: "Reduces risk of overvalued IPOs.",
+      future: "Higher quality IPOs expected.",
+      default: "Regulation improves market trust."
+    }
+
   },
   {
     id: "9",
@@ -100,6 +257,22 @@ export const newsArticles: NewsArticle[] = [
     date: "Mar 10, 2026",
     readTime: "6 min",
     author: "Karthik Subramaniam",
+
+    story: {
+      timeline: [
+        { date: "Now", title: "India Stack 3.0 launched", sentiment: "positive", detail: "AI democratization begins" },
+        { date: "Short Term", title: "Startup adoption rises", sentiment: "positive", detail: "Lower costs" },
+        { date: "Future", title: "Mass AI innovation", sentiment: "positive", detail: "Ecosystem growth" }
+      ],
+      prediction: "India could lead global open AI infrastructure."
+    },
+    
+    qa: {
+      why: "To make AI accessible to startups.",
+      impact: "Reduces cost of AI adoption.",
+      future: "Mass innovation across industries.",
+      default: "Digital infrastructure is evolving fast."
+    }
   },
   {
     id: "10",
@@ -110,108 +283,24 @@ export const newsArticles: NewsArticle[] = [
     date: "Mar 9, 2026",
     readTime: "5 min",
     author: "Divya Narayan",
+
+    story: {
+      timeline: [
+        { date: "Now", title: "Wealth platform launched", sentiment: "positive", detail: "AI investing begins" },
+        { date: "Short Term", title: "User adoption grows", sentiment: "positive", detail: "Retail participation" },
+        { date: "Future", title: "AI finance rise", sentiment: "positive", detail: "Automation dominates" }
+      ],
+      prediction: "AI-based investing may become mainstream."
+    },
+    
+    qa: {
+      why: "To simplify investing using AI.",
+      impact: "Improves financial inclusion.",
+      future: "AI advisors may replace traditional ones.",
+      default: "Fintech is evolving rapidly."
+    }
   },
+
+
+
 ];
-
-export const categoryColors: Record<string, string> = {
-  Finance: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-  Startup: "bg-violet-500/20 text-violet-400 border-violet-500/30",
-  Tech: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-  Policy: "bg-amber-500/20 text-amber-400 border-amber-500/30",
-};
-
-export const storyArcData = {
-  title: "Adani Group: From Controversy to Comeback",
-  timeline: [
-    { date: "Jan 2023", event: "Hindenburg Research publishes short-seller report", sentiment: "negative" as const },
-    { date: "Feb 2023", event: "₹20,000 Cr FPO cancelled amid stock crash", sentiment: "negative" as const },
-    { date: "Mar 2023", event: "Supreme Court panel formed to investigate", sentiment: "neutral" as const },
-    { date: "Jun 2023", event: "GQG Partners invests $1.87B, signaling confidence", sentiment: "positive" as const },
-    { date: "Jan 2024", event: "Stocks recover 80% of losses, debt reduced by $6B", sentiment: "positive" as const },
-    { date: "Sep 2024", event: "Adani acquires cement major ACC-Ambuja", sentiment: "positive" as const },
-    { date: "Mar 2025", event: "Group revenue crosses $40B annually", sentiment: "positive" as const },
-    { date: "Jan 2026", event: "Adani Green becomes world's largest solar developer", sentiment: "positive" as const },
-  ],
-  keyPlayers: [
-    { name: "Gautam Adani", role: "Chairman, Adani Group" },
-    { name: "Nate Anderson", role: "Founder, Hindenburg Research" },
-    { name: "Rajiv Jain", role: "CEO, GQG Partners" },
-    { name: "Jugeshinder Singh", role: "CFO, Adani Group" },
-  ],
-  predictions: [
-    "Potential listing of Adani subsidiary in international markets",
-    "Expansion into AI and data center business",
-    "Resolution of ongoing regulatory investigations",
-    "Strategic partnerships with global energy majors",
-  ],
-};
-
-export const briefingTopics = [
-  { id: "budget", label: "Union Budget 2026" },
-  { id: "ai", label: "AI Revolution in India" },
-  { id: "startup", label: "Startup Ecosystem" },
-  { id: "markets", label: "Market Outlook" },
-];
-
-export const briefingData: Record<string, { summary: string; highlights: string[]; sections: { title: string; content: string }[] }> = {
-  budget: {
-    summary: "The Union Budget 2026-27 focuses on accelerating India's path to a $5 trillion economy through infrastructure spending, tax simplification, and digital innovation incentives.",
-    highlights: [
-      "Corporate tax for MSMEs reduced from 25% to 22%",
-      "₹50,000 Cr PLI scheme for electronics manufacturing",
-      "National highways allocation increased by 30%",
-      "₹10,000 Cr Digital India Innovation Fund for AI startups",
-      "Fiscal deficit target maintained at 4.5% of GDP",
-    ],
-    sections: [
-      { title: "Economic Impact", content: "The budget is projected to add 0.5% to GDP growth through multiplier effects of capital expenditure. Infrastructure spending creates 12 million jobs directly and catalyzes private investment estimated at 3x the government outlay." },
-      { title: "Industry Impact", content: "Manufacturing sector stands to gain the most with expanded PLI schemes. IT services benefit from the AI fund, while real estate sees positive signals from affordable housing tax incentives. Banking sector expects improved asset quality." },
-      { title: "Key Players", content: "Finance Ministry leads implementation with NITI Aayog providing strategic oversight. RBI coordinates monetary policy alignment. Industry bodies CII and FICCI have broadly endorsed the budget direction." },
-    ],
-  },
-  ai: {
-    summary: "India is positioning itself as a global AI powerhouse through strategic government initiatives, private sector innovation, and the world's largest pool of AI engineering talent.",
-    highlights: [
-      "India Stack 3.0 provides open-source AI infrastructure",
-      "OpenAI-Reliance partnership brings GPT-5 to 450M users",
-      "AI-first startups raised $8B in 2025",
-      "Government mandates AI literacy in school curriculum",
-      "12 Indian language AI models now commercially available",
-    ],
-    sections: [
-      { title: "Economic Impact", content: "AI is estimated to add $500 billion to India's GDP by 2030. Automation of routine tasks could displace 15 million jobs while creating 25 million new roles in AI-adjacent fields." },
-      { title: "Industry Impact", content: "Financial services leads AI adoption at 65% penetration. Healthcare AI diagnostics now serve 200 million patients. Agricultural AI tools deployed across 10 million farms." },
-      { title: "Key Players", content: "Reliance Jio, TCS, Infosys, and Wipro lead enterprise AI. Startups like Krutrim, Sarvam AI, and Yellow.ai drive innovation. IITs and IISc produce 50,000 AI engineers annually." },
-    ],
-  },
-  startup: {
-    summary: "India's startup ecosystem has matured significantly, with a focus on profitability, deeper tech innovation, and expansion into tier-2/3 cities driving the next wave of growth.",
-    highlights: [
-      "107 unicorns as of March 2026",
-      "IPO pipeline exceeds 40 startups",
-      "Tier-2 city startups raised 30% of total funding",
-      "Deeptech startups grew 4x in two years",
-      "Women-led startups received record $2B funding",
-    ],
-    sections: [
-      { title: "Economic Impact", content: "Startups now contribute 8% of India's GDP and employ 1.5 million people directly. The multiplier effect in local economies is estimated at 5x for every startup job created." },
-      { title: "Industry Impact", content: "Quick commerce, EV, and climate tech are the fastest-growing sectors. SaaS exports from India crossed $20B. Fintech penetration in rural areas doubled in 18 months." },
-      { title: "Key Players", content: "Sequoia India, Accel, Peak XV lead funding. Zepto, PhonePe, and Razorpay are IPO-bound. Government's Startup India 3.0 scheme provides enhanced tax benefits." },
-    ],
-  },
-  markets: {
-    summary: "Indian equity markets continue their structural bull run, supported by strong domestic flows, corporate earnings growth, and India's increasing weight in global indices.",
-    highlights: [
-      "Sensex crossed 95,000 mark in Q1 2026",
-      "SIP flows exceed ₹25,000 Cr monthly",
-      "FII flows turned positive after 6-month outflow",
-      "Mid-cap index outperformed large-cap by 15%",
-      "IPO market saw ₹1.2 lakh Cr raised in FY26",
-    ],
-    sections: [
-      { title: "Economic Impact", content: "Market capitalization of listed Indian companies exceeds $6 trillion. Household financial savings increasingly directed to equities, with demat accounts crossing 200 million." },
-      { title: "Industry Impact", content: "Banking and financial services lead market gains. IT sector recovery underway after 2-year correction. Manufacturing companies see re-rating on China+1 theme." },
-      { title: "Key Players", content: "SEBI maintains regulatory vigilance with new disclosure norms. NSE and BSE compete for market share. Mutual fund AUM crosses ₹75 lakh crore." },
-    ],
-  },
-};

@@ -45,30 +45,33 @@ const HomePage = () => {
       ? newsArticles
       : newsArticles.filter((a) => a.category === selectedCategory);
 
-  const handleGenerateBriefing = async (topic: string) => {
-    try {
-      setLoading(true);
+  // const handleGenerateBriefing = async (topic: string) => {
+  //   try {
+  //     setLoading(true);
 
-      const userType = localStorage.getItem("userType") || "student";
+  //     const userType = localStorage.getItem("userType") || "student";
 
-      const res = await fetch("http://localhost:5000/ai/briefing", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ topic, userType }),
-      });
+  //     const res = await fetch("http://localhost:5000/ai/briefing", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ topic, userType }),
+  //     });
 
-      const data = await res.json();
+  //     const data = await res.json();
 
-      localStorage.setItem("briefing", data.briefing);
-      navigate("/briefings");
+  //     localStorage.setItem("briefing", data.briefing);
+  //     navigate("/briefings");
 
-      setLoading(false);
-    } catch (err) {
-      console.error(err);
-      setLoading(false);
-    }
+  //     setLoading(false);
+  //   } catch (err) {
+  //     console.error(err);
+  //     setLoading(false);
+  //   }
+  // };
+  const handleGenerateBriefing = (article: any) => {
+    navigate(`/news/${article.id}/briefing`);
   };
 
   return (
@@ -106,9 +109,8 @@ const HomePage = () => {
                 <button
                   key={type.id}
                   onClick={() => handleRoleChange(type.id)}
-                  className={`flex items-center gap-3 px-5 py-3 rounded-xl ${
-                    active ? "glass border-gold" : "glass"
-                  }`}
+                  className={`flex items-center gap-3 px-5 py-3 rounded-xl ${active ? "glass border-gold" : "glass"
+                    }`}
                 >
                   <Icon className={active ? "text-gold" : ""} />
                   <div>
@@ -151,9 +153,8 @@ const HomePage = () => {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-1 rounded-full ${
-                  selectedCategory === cat ? "bg-gold text-black" : "glass"
-                }`}
+                className={`px-4 py-1 rounded-full ${selectedCategory === cat ? "bg-gold text-black" : "glass"
+                  }`}
               >
                 {cat}
               </button>
@@ -182,7 +183,8 @@ const HomePage = () => {
                   <NewsCard article={article} index={i} />
 
                   <button
-                    onClick={() => handleGenerateBriefing(article.title)}
+                    // onClick={() => handleGenerateBriefing(article.title)}
+                    onClick={() => handleGenerateBriefing(article)}
                     className="mt-3 text-gold text-sm"
                   >
                     ✨ Generate AI Briefing

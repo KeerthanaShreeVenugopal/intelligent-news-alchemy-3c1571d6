@@ -1,18 +1,41 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Send } from "lucide-react";
 import VideoBackground from "@/components/VideoBackground";
 import Navbar from "@/components/Navbar";
+// import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { newsArticles } from "@/data/newsData";
+import ArticleTabs from "@/components/ArticleTabs";
 
 const BriefingsPage = () => {
-  const [briefingText, setBriefingText] = useState("");
+  const { id } = useParams();
+  const article = newsArticles.find((a) => a.id === id);
+
   const [followUp, setFollowUp] = useState("");
   const [chatResponse, setChatResponse] = useState("");
 
-  useEffect(() => {
-    const data = localStorage.getItem("briefing");
-    if (data) setBriefingText(data);
-  }, []);
+  // 🔥 HANDLE AI Q&A
+  const handleAsk = () => {
+    if (!followUp.trim()) return;
+
+    const question = followUp.toLowerCase();
+    let response = "";
+
+    if (question.includes("why")) {
+      response = article?.qa?.why || "No data available";
+    } else if (question.includes("impact")) {
+      response = article?.qa?.impact || "No data available";
+    } else if (question.includes("future")) {
+      response = article?.qa?.future || "No data available";
+    } else {
+      response =
+        article?.qa?.default ||
+        "Try asking about why, impact, or future.";
+    }
+
+    setChatResponse(response);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -22,22 +45,36 @@ const BriefingsPage = () => {
         <VideoBackground variant="dashboard" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 py-10">
-
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
 
-            <h1 className="text-4xl font-bold mb-6 text-center">
+           
+
+            {/* NAV TABS */}
+            <ArticleTabs />
+            {/* 🔥 AI SUMMARY */}
+
+             {/* TITLE */}
+             <h1 className="text-4xl font-bold mb-6 text-center">
               🧠 AI Briefing
             </h1>
-
-            {/* 🔥 SUMMARY */}
+            
             <div className="glass p-6 rounded-xl mb-6">
               <h2 className="text-gold font-bold mb-3">Summary</h2>
+
               <p className="text-sm whitespace-pre-wrap">
-                {briefingText}
+                {`🧠 AI Insight:
+
+${article?.summary}
+
+📊 Sector Impact:
+This affects the ${article?.category} sector significantly.
+
+⚡ Key Takeaway:
+This is an important trend to watch closely.`}
               </p>
             </div>
 
-            {/* 💬 CHAT */}
+            {/* 💬 AI CHAT */}
             <div className="glass p-6 rounded-xl">
               <h3 className="mb-3">Ask AI</h3>
 
@@ -46,18 +83,31 @@ const BriefingsPage = () => {
                   value={followUp}
                   onChange={(e) => setFollowUp(e.target.value)}
                   className="flex-1 px-4 py-2 rounded-lg bg-secondary"
-                  placeholder="Ask anything..."
+                  placeholder="Ask: why, impact, future..."
                 />
 
-                <button className="bg-gold px-4 rounded-lg">
+                <button
+                  onClick={handleAsk}
+                  className="bg-gold px-4 rounded-lg"
+                >
                   <Send size={16} />
                 </button>
               </div>
 
+              {/* 🔥 SUGGESTIONS */}
+              <p className="text-xs text-muted-foreground mt-2">
+                Try: "Why?", "Impact?", "Future?"
+              </p>
+
+              {/* RESPONSE */}
               {chatResponse && (
-                <div className="mt-4">
-                  <p>{chatResponse}</p>
-                </div>
+                <motion.div
+                  className="mt-4 p-3 rounded-lg bg-secondary/40"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  <p className="text-sm">{chatResponse}</p>
+                </motion.div>
               )}
             </div>
 
