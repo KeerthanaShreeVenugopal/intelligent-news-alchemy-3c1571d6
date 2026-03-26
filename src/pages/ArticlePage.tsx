@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Clock, User, Sparkles, Send } from "lucide-react";
 import { useState } from "react";
 import VideoBackground from "@/components/VideoBackground";
+import ArticleTabs from "@/components/ArticleTabs";
 import Navbar from "@/components/Navbar";
 import { newsArticles, categoryColors } from "@/data/newsData";
 
@@ -42,9 +43,10 @@ const ArticlePage = () => {
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-10">
           {/* Back button */}
-          <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8">
+          {/* <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8">
             <ArrowLeft className="w-4 h-4" /> Back to Feed
-          </Link>
+          </Link> */}
+          <ArticleTabs />
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             {/* Category + meta */}

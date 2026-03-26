@@ -2,6 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import heroVideo from "../../public/videos/hero.mp4.asset.json";
 import dashboardVideo from "../../public/videos/dashboard.mp4.asset.json";
 import articleVideo from "../../public/videos/article.mp4.asset.json";
+import { useParams } from "react-router-dom";
+import { newsArticles } from "@/data/newsData";
+
+
 
 type VideoVariant = "hero" | "dashboard" | "article";
 

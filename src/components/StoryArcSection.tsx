@@ -1,14 +1,8 @@
 import { motion } from "framer-motion";
 import AnimatedBackground from "./AnimatedBackground";
 import { GitBranch, TrendingUp, TrendingDown, Minus } from "lucide-react";
-
-const timelineEvents = [
-  { date: "Jan 2026", title: "Adani Group announces $10B green energy investment", sentiment: "positive", detail: "Markets rally 2.3%" },
-  { date: "Feb 2026", title: "Hindenburg releases follow-up report", sentiment: "negative", detail: "Stock drops 8% intraday" },
-  { date: "Feb 2026", title: "SEBI clears Adani of major charges", sentiment: "positive", detail: "Recovery begins, +5% in 2 days" },
-  { date: "Mar 2026", title: "Q4 results beat estimates by 15%", sentiment: "positive", detail: "Institutional buying surge" },
-  { date: "Mar 2026", title: "New airport contract awarded", sentiment: "neutral", detail: "Long-term growth catalyst" },
-];
+import { useParams } from "react-router-dom";
+import { newsArticles } from "@/data/newsData";
 
 const sentimentIcon = {
   positive: <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />,
@@ -29,82 +23,113 @@ const sentimentDot = {
 };
 
 const StoryArcSection = () => {
+  const { id } = useParams();
+  const article = newsArticles.find((a) => a.id === id);
+
+  // ✅ FETCH FROM newsData.ts
+  const timelineEvents = article?.story?.timeline || [];
+
   return (
-    <section id="tracker" className="relative py-32 px-6">
-      <AnimatedBackground variant="storyarc" />
+    // <section id="tracker" className="relative py-32 px-6">
+    <section className="relative py-12 px-6">
+      {/* <AnimatedBackground variant="storyarc" /> */}
 
       <div className="relative z-10 max-w-5xl mx-auto">
+        {/* HEADER */}
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-8"
           initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+          animate={{ opacity: 1, y: 0 }}
         >
-          <span className="inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-widest uppercase border border-electric/30 text-electric mb-6" style={{ background: "hsl(210 100% 55% / 0.08)" }}>
+          <span className="inline-block px-4 py-1.5 rounded-full text-xs border border-electric/30 text-electric mb-6">
             Story Arc Tracker
           </span>
-          <h2 className="text-4xl md:text-6xl font-bold tracking-tight font-['Space_Grotesk'] mb-4">
-            Track Any{" "}
-            <span className="text-gradient-electric">Story</span>
+
+          <h2 className="text-4xl md:text-6xl font-bold mb-4">
+            Track Any <span className="text-gradient-electric">Story</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-            Visual narratives with timelines, key players, sentiment shifts, and predictions.
+
+          <p className="text-muted-foreground text-lg">
+            Interactive timeline powered by AI insights
           </p>
         </motion.div>
 
-        {/* Story arc card */}
+        {/* CARD */}
         <motion.div
           className="rounded-2xl glass-strong p-6 md:p-8"
-          style={{ boxShadow: "0 25px 80px -20px hsl(0 0% 0% / 0.5)" }}
           initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1 }}
+          animate={{ opacity: 1, y: 0 }}
         >
+          {/* TITLE */}
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-3">
               <GitBranch className="w-5 h-5 text-electric" />
-              <h3 className="text-lg font-bold font-['Space_Grotesk']">Adani Group: 2026 Trajectory</h3>
+              <h3 className="text-lg font-bold">
+                {article?.title}
+              </h3>
             </div>
-            <span className="text-xs px-3 py-1 rounded-full bg-emerald-400/10 text-emerald-400 border border-emerald-400/20 font-medium">
-              Overall: Bullish
+
+            <span className="text-xs px-3 py-1 rounded-full bg-emerald-400/10 text-emerald-400">
+              AI Analysis
             </span>
           </div>
 
-          {/* Timeline */}
+          {/* 🔥 EMPTY STATE */}
+          {timelineEvents.length === 0 && (
+            <p className="text-center text-muted-foreground">
+              No story data available
+            </p>
+          )}
+
+          {/* TIMELINE */}
           <div className="relative">
             <div className="absolute left-4 top-0 bottom-0 w-px bg-border/50" />
+
             <div className="space-y-6">
               {timelineEvents.map((event, i) => (
                 <motion.div
                   key={i}
-                  className={`relative pl-10 group`}
+                  className="relative pl-10"
                   initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.1 }}
                 >
-                  <div className={`absolute left-[11px] top-2 w-2.5 h-2.5 rounded-full ${sentimentDot[event.sentiment]} ring-4 ring-background`} />
-                  <div className={`p-4 rounded-xl bg-secondary/30 border ${sentimentColor[event.sentiment]} hover:bg-secondary/50 transition-colors cursor-pointer`}>
+                  {/* DOT */}
+                  <div
+                    className={`absolute left-[11px] top-2 w-2.5 h-2.5 rounded-full ${
+                      sentimentDot[event.sentiment]
+                    }`}
+                  />
+
+                  {/* CARD */}
+                  <div
+                    className={`p-4 rounded-xl bg-secondary/30 border ${
+                      sentimentColor[event.sentiment]
+                    }`}
+                  >
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[10px] text-muted-foreground font-mono">{event.date}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {event.date}
+                      </span>
                       {sentimentIcon[event.sentiment]}
                     </div>
-                    <p className="text-sm font-medium mb-1">{event.title}</p>
-                    <p className="text-xs text-muted-foreground">{event.detail}</p>
+
+                    <p className="text-sm font-medium">{event.title}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {event.detail}
+                    </p>
                   </div>
                 </motion.div>
               ))}
             </div>
           </div>
 
-          {/* Prediction */}
-          <div className="mt-8 p-4 rounded-xl border border-gold/20" style={{ background: "hsl(38 92% 55% / 0.05)" }}>
-            <p className="text-xs text-gold font-semibold uppercase tracking-wider mb-2">🔮 What to Watch Next</p>
+          {/* 🔮 PREDICTION */}
+          <div className="mt-8 p-4 rounded-xl border border-gold/20">
+            <p className="text-xs text-gold mb-2">🔮 What to Watch Next</p>
+
             <p className="text-sm text-muted-foreground">
-              Q1 FY27 results expected in April. Analysts project <span className="text-foreground font-medium">22% revenue growth</span>. 
-              Watch for green energy subsidiary IPO announcement — could unlock significant value.
+              {article?.story?.prediction || "No prediction available"}
             </p>
           </div>
         </motion.div>
