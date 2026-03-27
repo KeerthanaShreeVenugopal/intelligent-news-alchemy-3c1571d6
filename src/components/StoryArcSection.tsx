@@ -96,16 +96,14 @@ const StoryArcSection = () => {
                 >
                   {/* DOT */}
                   <div
-                    className={`absolute left-[11px] top-2 w-2.5 h-2.5 rounded-full ${
-                      sentimentDot[event.sentiment]
-                    }`}
+                    className={`absolute left-[11px] top-2 w-2.5 h-2.5 rounded-full ${sentimentDot[event.sentiment]
+                      }`}
                   />
 
                   {/* CARD */}
                   <div
-                    className={`p-4 rounded-xl bg-secondary/30 border ${
-                      sentimentColor[event.sentiment]
-                    }`}
+                    className={`p-4 rounded-xl bg-secondary/30 border ${sentimentColor[event.sentiment]
+                      }`}
                   >
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-xs text-muted-foreground">
@@ -123,7 +121,29 @@ const StoryArcSection = () => {
               ))}
             </div>
           </div>
+          {/* 👥 KEY PLAYERS */}
+          {article?.story?.keyPlayers && (
+            <div className="mt-8">
+              <h3 className="text-sm text-gold mb-3">👥 Key Players</h3>
 
+              <div className="grid sm:grid-cols-2 gap-3">
+                {article.story.keyPlayers.map((player, i) => (
+                  <div
+                    key={i}
+                    className="p-3 rounded-lg bg-secondary/30 border border-border/40"
+                  >
+                    <p className="text-sm font-medium">{player.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {player.role}
+                    </p>
+                    <p className="text-xs mt-1 text-muted-foreground">
+                      {player.impact}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           {/* 🔮 PREDICTION */}
           <div className="mt-8 p-4 rounded-xl border border-gold/20">
             <p className="text-xs text-gold mb-2">🔮 What to Watch Next</p>
