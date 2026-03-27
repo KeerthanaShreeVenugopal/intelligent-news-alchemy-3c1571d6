@@ -73,7 +73,7 @@ const ArticlePage = () => {
             <div className="glass rounded-2xl p-6 mb-8 border-gold/20">
               <div className="flex items-center gap-2 mb-3">
                 <Sparkles className="w-5 h-5 text-gold" />
-                <h3 className="text-sm font-semibold text-gold uppercase tracking-wider">AI Summary</h3>
+                <h3 className="text-sm font-semibold text-gold uppercase tracking-wider">Summary</h3>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 {article.summary} This article explores the broader implications for India's business landscape, examining how stakeholders from retail investors to institutional players are positioning themselves in response to these developments.
