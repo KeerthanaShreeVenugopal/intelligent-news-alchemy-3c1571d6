@@ -16,7 +16,7 @@ export interface NewsArticle {
   author: string;
   image?: string;
 
-  // 🔥 STORY ARC
+  // 🔥 STORY ARC (UPGRADED)
   story?: {
     timeline: {
       date: string;
@@ -24,10 +24,19 @@ export interface NewsArticle {
       sentiment: "positive" | "negative" | "neutral";
       detail: string;
     }[];
+
+    // ✅ NEW: KEY PLAYERS
+    keyPlayers: {
+      name: string;
+      role: string;
+      impact: string;
+    }[];
+
+    // ✅ EXISTING
     prediction: string;
   };
 
-  // 🔥 AI Q&A
+  // 🔥 AI Q&A (you can keep or remove later)
   qa?: {
     why: string;
     impact: string;
@@ -49,11 +58,74 @@ export const newsArticles: NewsArticle[] = [
 
     story: {
       timeline: [
-        { date: "Now", title: "RBI holds rates", sentiment: "neutral", detail: "Market stable" },
-        { date: "Short Term", title: "Loan impact", sentiment: "positive", detail: "Stable EMIs" },
-        { date: "Future", title: "Policy shift possible", sentiment: "neutral", detail: "Depends on inflation" }
+        {
+          date: "Feb 2023",
+          title: "RBI begins aggressive rate hikes",
+          sentiment: "negative",
+          detail: "Repo rate increased to control post-pandemic inflation surge"
+        },
+        {
+          date: "Aug 2023",
+          title: "Inflation moderates slightly",
+          sentiment: "neutral",
+          detail: "Supply chains stabilize but core inflation remains sticky"
+        },
+        {
+          date: "Jan 2024",
+          title: "RBI pauses rate hikes",
+          sentiment: "neutral",
+          detail: "Shift to data-driven approach amid global uncertainty"
+        },
+        {
+          date: "Sep 2024",
+          title: "Global slowdown impacts exports",
+          sentiment: "negative",
+          detail: "Weak demand affects India’s external sector"
+        },
+        {
+          date: "Mar 2025",
+          title: "Food inflation spikes again",
+          sentiment: "negative",
+          detail: "Climate issues drive volatility in food prices"
+        },
+        {
+          date: "Jan 2026",
+          title: "Markets anticipate rate cuts",
+          sentiment: "positive",
+          detail: "Cooling inflation raises easing expectations"
+        },
+        {
+          date: "Mar 2026",
+          title: "RBI holds repo rate at 6.5%",
+          sentiment: "neutral",
+          detail: "Balances growth with inflation risks"
+        }
       ],
-      prediction: "Interest rates likely to remain stable in near term."
+    
+      keyPlayers: [
+        {
+          name: "Shaktikanta Das",
+          role: "Governor, RBI",
+          impact: "Leads monetary policy and rate decisions"
+        },
+        {
+          name: "Reserve Bank of India",
+          role: "Central Bank",
+          impact: "Controls inflation, liquidity, and interest rates"
+        },
+        {
+          name: "Government of India",
+          role: "Policy Partner",
+          impact: "Aligns fiscal policy with RBI actions"
+        },
+        {
+          name: "Commercial Banks",
+          role: "Financial Intermediaries",
+          impact: "Transmit rate changes to loans and deposits"
+        }
+      ],
+    
+      prediction: "RBI is likely to maintain a cautious stance, with gradual rate cuts only if inflation stabilizes sustainably."
     },
 
     qa: {
@@ -76,11 +148,74 @@ export const newsArticles: NewsArticle[] = [
 
     story: {
       timeline: [
-        { date: "Now", title: "Funding raised", sentiment: "positive", detail: "Strong demand" },
-        { date: "Short Term", title: "Expansion", sentiment: "positive", detail: "New cities" },
-        { date: "Future", title: "IPO", sentiment: "neutral", detail: "Public listing soon" }
+        {
+          date: "2021",
+          title: "Zepto founded during quick-commerce boom",
+          sentiment: "positive",
+          detail: "Rising demand for 10-minute delivery fuels rapid growth"
+        },
+        {
+          date: "2022",
+          title: "Rapid expansion across metros",
+          sentiment: "positive",
+          detail: "Dark store model scales aggressively"
+        },
+        {
+          date: "Early 2023",
+          title: "Competition intensifies",
+          sentiment: "negative",
+          detail: "Blinkit and Instamart increase pressure on margins"
+        },
+        {
+          date: "Late 2023",
+          title: "Shift towards profitability",
+          sentiment: "neutral",
+          detail: "Focus on cost optimization and unit economics"
+        },
+        {
+          date: "2024",
+          title: "Margins improve",
+          sentiment: "positive",
+          detail: "Higher basket size and operational efficiency"
+        },
+        {
+          date: "2025",
+          title: "Expansion to Tier-2 cities",
+          sentiment: "positive",
+          detail: "Scaling beyond metros for growth"
+        },
+        {
+          date: "Mar 2026",
+          title: "$500M funding raised pre-IPO",
+          sentiment: "positive",
+          detail: "Investor confidence ahead of public listing"
+        }
       ],
-      prediction: "Zepto likely to become major quick commerce leader."
+    
+      keyPlayers: [
+        {
+          name: "Aadit Palicha",
+          role: "CEO, Zepto",
+          impact: "Leads growth and IPO strategy"
+        },
+        {
+          name: "DST Global",
+          role: "Investor",
+          impact: "Provides capital and global validation"
+        },
+        {
+          name: "Blinkit & Swiggy Instamart",
+          role: "Competitors",
+          impact: "Drive competition and pricing pressure"
+        },
+        {
+          name: "SEBI",
+          role: "Market Regulator",
+          impact: "Approves IPO and listing compliance"
+        }
+      ],
+    
+      prediction: "Zepto is expected to go public soon, potentially becoming a dominant player in India’s quick-commerce sector."
     },
 
     qa: {
@@ -103,11 +238,68 @@ export const newsArticles: NewsArticle[] = [
 
     story: {
       timeline: [
-        { date: "Now", title: "Construction starts", sentiment: "positive", detail: "Big milestone" },
-        { date: "Short Term", title: "Jobs created", sentiment: "positive", detail: "Industrial growth" },
-        { date: "Future", title: "Chip independence", sentiment: "positive", detail: "Less imports" }
+        {
+          date: "2020",
+          title: "Global chip shortage disrupts industries",
+          sentiment: "negative",
+          detail: "India faces heavy dependence on imports"
+        },
+        {
+          date: "2022",
+          title: "India launches semiconductor mission",
+          sentiment: "positive",
+          detail: "$10B incentive program announced"
+        },
+        {
+          date: "2023",
+          title: "Talks with global chipmakers begin",
+          sentiment: "neutral",
+          detail: "Government explores partnerships"
+        },
+        {
+          date: "2024",
+          title: "Tata finalizes semiconductor plans",
+          sentiment: "positive",
+          detail: "Major step toward domestic production"
+        },
+        {
+          date: "2025",
+          title: "Ecosystem development begins",
+          sentiment: "positive",
+          detail: "Supporting industries start forming"
+        },
+        {
+          date: "Mar 2026",
+          title: "Construction begins in Dholera",
+          sentiment: "positive",
+          detail: "India enters semiconductor manufacturing"
+        }
       ],
-      prediction: "India may become global semiconductor hub."
+    
+      keyPlayers: [
+        {
+          name: "Narendra Modi",
+          role: "Prime Minister",
+          impact: "Drives semiconductor policy initiatives"
+        },
+        {
+          name: "Tata Electronics",
+          role: "Industry Leader",
+          impact: "Leading India’s chip manufacturing efforts"
+        },
+        {
+          name: "Global Chipmakers",
+          role: "Technology Partners",
+          impact: "Provide expertise and advanced tech"
+        },
+        {
+          name: "Government of India",
+          role: "Policy Maker",
+          impact: "Funds and supports infrastructure"
+        }
+      ],
+    
+      prediction: "India could become a key semiconductor hub, reducing import dependency and strengthening global supply chains."
     },
 
     qa: {
@@ -130,11 +322,62 @@ export const newsArticles: NewsArticle[] = [
 
     story: {
       timeline: [
-        { date: "Now", title: "Budget announced", sentiment: "positive", detail: "Markets rise" },
-        { date: "Short Term", title: "Tax changes", sentiment: "positive", detail: "Business boost" },
-        { date: "Future", title: "Economic growth", sentiment: "positive", detail: "GDP increase" }
+        {
+          date: "Feb 2025",
+          title: "Pre-budget consultations begin",
+          sentiment: "neutral",
+          detail: "Government engages industry leaders and economists"
+        },
+        {
+          date: "Jan 2026",
+          title: "Focus on manufacturing and AI announced",
+          sentiment: "positive",
+          detail: "Signals shift toward innovation-driven economy"
+        },
+        {
+          date: "Mar 15, 2026",
+          title: "Union Budget 2026 presented",
+          sentiment: "positive",
+          detail: "Tax cuts, infrastructure push, AI fund introduced"
+        },
+        {
+          date: "Mar 2026",
+          title: "Markets react positively",
+          sentiment: "positive",
+          detail: "Sensex rises 800 points after announcement"
+        },
+        {
+          date: "Mid 2026",
+          title: "Implementation phase begins",
+          sentiment: "neutral",
+          detail: "Execution challenges and fiscal concerns emerge"
+        }
       ],
-      prediction: "Budget may accelerate India's economic growth."
+    
+      keyPlayers: [
+        {
+          name: "Nirmala Sitharaman",
+          role: "Finance Minister",
+          impact: "Designs and presents fiscal policy roadmap"
+        },
+        {
+          name: "Government of India",
+          role: "Policy Maker",
+          impact: "Drives infrastructure and economic reforms"
+        },
+        {
+          name: "Indian Corporates",
+          role: "Beneficiaries",
+          impact: "Gain from tax cuts and incentives"
+        },
+        {
+          name: "Investors",
+          role: "Market Participants",
+          impact: "React to policy signals and economic outlook"
+        }
+      ],
+    
+      prediction: "If executed effectively, the budget could accelerate India's growth, but fiscal deficit risks remain a concern."
     },
 
     qa: {
@@ -156,11 +399,62 @@ export const newsArticles: NewsArticle[] = [
 
     story: {
       timeline: [
-        { date: "Now", title: "OpenAI + Reliance partnership", sentiment: "positive", detail: "AI expansion across India" },
-        { date: "Short Term", title: "Jio AI rollout", sentiment: "positive", detail: "Millions get AI access" },
-        { date: "Future", title: "AI ecosystem growth", sentiment: "positive", detail: "India leads AI adoption" }
+        {
+          date: "2024",
+          title: "India emerges as key AI market",
+          sentiment: "positive",
+          detail: "Rapid adoption across enterprises and startups"
+        },
+        {
+          date: "Late 2025",
+          title: "Talks between OpenAI and Reliance begin",
+          sentiment: "neutral",
+          detail: "Focus on large-scale AI deployment"
+        },
+        {
+          date: "Mar 14, 2026",
+          title: "Partnership officially announced",
+          sentiment: "positive",
+          detail: "AI integration into Jio ecosystem"
+        },
+        {
+          date: "2026",
+          title: "AI rollout across 450M users",
+          sentiment: "positive",
+          detail: "Mass adoption across India"
+        },
+        {
+          date: "2027",
+          title: "India AI ecosystem expands",
+          sentiment: "positive",
+          detail: "Startup and enterprise adoption surges"
+        }
       ],
-      prediction: "India could become one of the largest AI-powered economies."
+    
+      keyPlayers: [
+        {
+          name: "Sam Altman",
+          role: "CEO, OpenAI",
+          impact: "Drives global AI expansion strategy"
+        },
+        {
+          name: "Mukesh Ambani",
+          role: "Chairman, Reliance",
+          impact: "Leverages Jio ecosystem for AI scale"
+        },
+        {
+          name: "Reliance Jio",
+          role: "Platform Provider",
+          impact: "Distributes AI to millions of users"
+        },
+        {
+          name: "Indian Developers",
+          role: "Ecosystem Builders",
+          impact: "Build applications using AI infrastructure"
+        }
+      ],
+    
+      prediction: "India could become one of the largest AI markets globally, accelerating digital transformation across sectors."
     },
 
     qa: {
@@ -182,11 +476,62 @@ export const newsArticles: NewsArticle[] = [
 
     story: {
       timeline: [
-        { date: "Now", title: "$20B investment announced", sentiment: "positive", detail: "Major renewable push" },
-        { date: "Short Term", title: "Solar & wind expansion", sentiment: "positive", detail: "Capacity increases" },
-        { date: "Future", title: "Green hydrogen scale", sentiment: "positive", detail: "Clean energy leadership" }
+        {
+          date: "2023",
+          title: "Adani recovers from crisis",
+          sentiment: "neutral",
+          detail: "Focus shifts to rebuilding investor confidence"
+        },
+        {
+          date: "2024",
+          title: "Renewable investments increase",
+          sentiment: "positive",
+          detail: "Expansion into solar and wind sectors"
+        },
+        {
+          date: "2025",
+          title: "Global partnerships formed",
+          sentiment: "positive",
+          detail: "European and Japanese collaborations"
+        },
+        {
+          date: "Mar 13, 2026",
+          title: "$20B investment announced",
+          sentiment: "positive",
+          detail: "Major push into green energy"
+        },
+        {
+          date: "2030 (Target)",
+          title: "50 GW renewable capacity goal",
+          sentiment: "positive",
+          detail: "Global leadership in solar energy"
+        }
       ],
-      prediction: "Adani could become a global renewable energy giant."
+    
+      keyPlayers: [
+        {
+          name: "Gautam Adani",
+          role: "Chairman, Adani Group",
+          impact: "Leads renewable expansion strategy"
+        },
+        {
+          name: "Adani Green Energy",
+          role: "Energy Company",
+          impact: "Executes solar and wind projects"
+        },
+        {
+          name: "Global Energy Partners",
+          role: "Collaborators",
+          impact: "Provide funding and technology"
+        },
+        {
+          name: "Environmental Groups",
+          role: "Watchdogs",
+          impact: "Monitor sustainability impact"
+        }
+      ],
+    
+      prediction: "Adani could emerge as a global renewable leader, but execution and regulatory scrutiny remain key risks."
     },
 
     qa: {
@@ -208,11 +553,62 @@ export const newsArticles: NewsArticle[] = [
 
     story: {
       timeline: [
-        { date: "Now", title: "New IPO rules introduced", sentiment: "neutral", detail: "Focus on transparency" },
-        { date: "Short Term", title: "Stricter disclosures", sentiment: "positive", detail: "Investor protection" },
-        { date: "Future", title: "Stable IPO market", sentiment: "positive", detail: "Less risky listings" }
+        {
+          date: "2023",
+          title: "IPO market volatility rises",
+          sentiment: "negative",
+          detail: "Many listings underperform post-IPO"
+        },
+        {
+          date: "2024",
+          title: "Investor concerns grow",
+          sentiment: "negative",
+          detail: "Calls for better transparency"
+        },
+        {
+          date: "Early 2026",
+          title: "SEBI drafts new regulations",
+          sentiment: "neutral",
+          detail: "Focus on protecting retail investors"
+        },
+        {
+          date: "Mar 12, 2026",
+          title: "New IPO norms announced",
+          sentiment: "positive",
+          detail: "Stricter disclosures introduced"
+        },
+        {
+          date: "Late 2026",
+          title: "IPO market adjusts",
+          sentiment: "neutral",
+          detail: "Fewer but higher-quality listings"
+        }
       ],
-      prediction: "IPO market may become more stable but slower."
+    
+      keyPlayers: [
+        {
+          name: "Madhabi Puri Buch",
+          role: "Chairperson, SEBI",
+          impact: "Leads regulatory reforms"
+        },
+        {
+          name: "SEBI",
+          role: "Market Regulator",
+          impact: "Ensures investor protection"
+        },
+        {
+          name: "IPO-bound Companies",
+          role: "Market Participants",
+          impact: "Must comply with stricter norms"
+        },
+        {
+          name: "Retail Investors",
+          role: "Beneficiaries",
+          impact: "Gain better transparency"
+        }
+      ],
+    
+      prediction: "IPO market may become more stable and trustworthy, though overall listing activity could slow down."
     },
 
     qa: {
@@ -233,11 +629,56 @@ export const newsArticles: NewsArticle[] = [
     author: "Meera Rajendran",
     story: {
       timeline: [
-        { date: "Now", title: "New IPO rules introduced", sentiment: "neutral", detail: "Focus on transparency" },
-        { date: "Short Term", title: "Stricter disclosures", sentiment: "positive", detail: "Investor protection" },
-        { date: "Future", title: "Stable IPO market", sentiment: "positive", detail: "Less risky listings" }
+        {
+          date: "2025",
+          title: "Flipkart launches AI shopping assistant",
+          sentiment: "positive",
+          detail: "Conversational commerce introduced"
+        },
+        {
+          date: "Late 2025",
+          title: "Rapid adoption across users",
+          sentiment: "positive",
+          detail: "Millions start using AI assistant"
+        },
+        {
+          date: "Mar 2026",
+          title: "100M users milestone reached",
+          sentiment: "positive",
+          detail: "One of fastest AI adoptions in India"
+        },
+        {
+          date: "2026",
+          title: "Multimodal AI features expand",
+          sentiment: "positive",
+          detail: "Voice, image-based search added"
+        }
       ],
-      prediction: "IPO market may become more stable but slower."
+    
+      keyPlayers: [
+        {
+          name: "Kalyan Krishnamurthy",
+          role: "CEO, Flipkart",
+          impact: "Drives AI-led commerce strategy"
+        },
+        {
+          name: "Flipkart",
+          role: "E-commerce Platform",
+          impact: "Implements AI shopping experience"
+        },
+        {
+          name: "Walmart",
+          role: "Parent Company",
+          impact: "Provides funding and global strategy"
+        },
+        {
+          name: "Consumers",
+          role: "End Users",
+          impact: "Adopt AI for shopping decisions"
+        }
+      ],
+    
+      prediction: "AI-driven commerce could redefine online shopping, with conversational interfaces becoming standard."
     },
 
     qa: {
@@ -260,13 +701,58 @@ export const newsArticles: NewsArticle[] = [
 
     story: {
       timeline: [
-        { date: "Now", title: "India Stack 3.0 launched", sentiment: "positive", detail: "AI democratization begins" },
-        { date: "Short Term", title: "Startup adoption rises", sentiment: "positive", detail: "Lower costs" },
-        { date: "Future", title: "Mass AI innovation", sentiment: "positive", detail: "Ecosystem growth" }
+        {
+          date: "2016–2022",
+          title: "UPI and Aadhaar scale massively",
+          sentiment: "positive",
+          detail: "Foundation for digital public infrastructure"
+        },
+        {
+          date: "2023",
+          title: "AI adoption rises globally",
+          sentiment: "positive",
+          detail: "India plans next-gen infrastructure"
+        },
+        {
+          date: "Mar 10, 2026",
+          title: "India Stack 3.0 launched",
+          sentiment: "positive",
+          detail: "Open AI tools for startups"
+        },
+        {
+          date: "2026",
+          title: "Startup adoption increases",
+          sentiment: "positive",
+          detail: "Cost savings of 60% reported"
+        }
       ],
-      prediction: "India could lead global open AI infrastructure."
-    },
     
+      keyPlayers: [
+        {
+          name: "Ashwini Vaishnaw",
+          role: "IT Minister",
+          impact: "Leads digital infrastructure initiatives"
+        },
+        {
+          name: "Government of India",
+          role: "Platform Creator",
+          impact: "Provides AI tools and funding"
+        },
+        {
+          name: "Startups",
+          role: "Primary Users",
+          impact: "Leverage AI for innovation"
+        },
+        {
+          name: "Cloud Providers",
+          role: "Infrastructure Partners",
+          impact: "Provide compute resources"
+        }
+      ],
+    
+      prediction: "India could lead in open AI infrastructure, enabling mass-scale innovation across industries."
+    },
+
     qa: {
       why: "To make AI accessible to startups.",
       impact: "Reduces cost of AI adoption.",
@@ -286,13 +772,58 @@ export const newsArticles: NewsArticle[] = [
 
     story: {
       timeline: [
-        { date: "Now", title: "Wealth platform launched", sentiment: "positive", detail: "AI investing begins" },
-        { date: "Short Term", title: "User adoption grows", sentiment: "positive", detail: "Retail participation" },
-        { date: "Future", title: "AI finance rise", sentiment: "positive", detail: "Automation dominates" }
+        {
+          date: "2023",
+          title: "Fintech adoption rises",
+          sentiment: "positive",
+          detail: "Digital payments dominate India"
+        },
+        {
+          date: "2024",
+          title: "AI enters financial services",
+          sentiment: "positive",
+          detail: "Robo-advisors gain traction"
+        },
+        {
+          date: "Mar 9, 2026",
+          title: "PhonePe Wealth launched",
+          sentiment: "positive",
+          detail: "AI-driven investing platform introduced"
+        },
+        {
+          date: "2026",
+          title: "Mass adoption begins",
+          sentiment: "positive",
+          detail: "Retail investors enter markets"
+        }
       ],
-      prediction: "AI-based investing may become mainstream."
-    },
     
+      keyPlayers: [
+        {
+          name: "Sameer Nigam",
+          role: "CEO, PhonePe",
+          impact: "Leads fintech innovation"
+        },
+        {
+          name: "PhonePe",
+          role: "Platform Provider",
+          impact: "Delivers AI investment tools"
+        },
+        {
+          name: "SEBI",
+          role: "Regulator",
+          impact: "Ensures compliance and trust"
+        },
+        {
+          name: "Retail Investors",
+          role: "Target Users",
+          impact: "Gain access to investing"
+        }
+      ],
+    
+      prediction: "AI-driven wealth management could become mainstream, transforming how Indians invest."
+    },
+
     qa: {
       why: "To simplify investing using AI.",
       impact: "Improves financial inclusion.",
