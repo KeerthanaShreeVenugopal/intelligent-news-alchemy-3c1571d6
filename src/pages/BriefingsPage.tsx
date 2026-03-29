@@ -18,6 +18,27 @@ const BriefingsPage = () => {
   const [followUp, setFollowUp] = useState("");
   const [chatResponse, setChatResponse] = useState("");
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("overview");
+  const [aiSummary, setAiSummary] = useState<string | null>(null);
+  const handleGenerate = () => {
+    setLoading(true);
+    setAiSummary(null);
+
+    setTimeout(() => {
+      const summary = `🧠 AI Insight:
+  
+  ${article.summary}
+  
+  📊 Sector Impact:
+  This affects the ${article.category} sector significantly.
+  
+  ⚡ Key Takeaway:
+  This is an important trend to watch closely.`;
+
+      setAiSummary(summary);
+      setLoading(false);
+    }, 3000); // 3 sec delay
+  };
 
   // 🔥 HANDLE AI Q&A
   // const handleAsk = () => {
@@ -86,7 +107,7 @@ const BriefingsPage = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      <section className="relative min-h-screen pt-20">
+      <section className="relative min-h-screen pt-32">
         <VideoBackground variant="dashboard" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 py-10">
@@ -99,11 +120,94 @@ const BriefingsPage = () => {
             {/* 🔥 AI SUMMARY */}
 
             {/* TITLE */}
-            <h1 className="text-4xl font-bold mb-6 text-center">
-              🧠 AI Briefing
-            </h1>
+            <div className="flex justify-center mt-6 mb-6">
+              <button
+                onClick={handleGenerate}
+                disabled={loading}
+                className="px-6 py-3 bg-electric text-white rounded-lg hover:scale-105 transition disabled:opacity-50"
+              >
+                {loading ? "Generating..." : "Generate AI Briefing ✨"}
+              </button>
+            </div>
+            {loading && (
+              <p className="text-center text-muted-foreground animate-pulse">
+                🤖 AI is generating briefing...
+              </p>
+            )}
 
-            <div className="glass p-6 rounded-xl mb-6">
+            {/* {aiSummary && (
+              <div className="glass p-6 rounded-xl mb-6">
+                <h1 className="text-4xl font-bold mb-6 text-center">
+                  🧠 AI Briefing
+                </h1>
+
+                <h2 className="text-gold font-bold mb-3">Summary</h2>
+
+                <p className="text-sm whitespace-pre-wrap">
+                  {aiSummary}
+                </p>
+              </div>
+            )} */}
+            {aiSummary && (
+              <div className="glass p-6 rounded-xl mb-6">
+
+                <h1 className="text-4xl font-bold mb-6 text-center">
+                  🧠 AI Briefing
+                  <p className="text-xs text-muted-foreground mb-2">
+                    Synthesized from multiple reports
+                  </p>
+                </h1>
+
+                {/* 🔥 TABS */}
+                <div className="flex gap-3 mb-4 flex-wrap justify-center">
+                  {["overview", "insights", "risks", "future"].map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(tab)}
+                      className={`px-4 py-1 rounded-full text-xs capitalize ${activeTab === tab
+                        ? "bg-electric text-white"
+                        : "bg-secondary text-muted-foreground"
+                        }`}
+                    >
+                      {tab}
+                    </button>
+                  ))}
+                </div>
+
+                {/* 🔥 CONTENT */}
+                <div className="text-sm text-center">
+
+                  {activeTab === "overview" && (
+                    <p>{article.summary}</p>
+                  )}
+
+                  {activeTab === "insights" && (
+                    <ul className="space-y-2">
+                      {article?.story?.briefing?.insights?.map((item, i) => (
+                        <li key={i}>• {item}</li>
+                      ))}
+                    </ul>
+                  )}
+
+                  {activeTab === "risks" && (
+                    <ul className="space-y-2">
+                      {article?.story?.briefing?.risks?.map((item, i) => (
+                        <li key={i}>• {item}</li>
+                      ))}
+                    </ul>
+                  )}
+
+                  {activeTab === "future" && (
+                    <p>{article?.story?.briefing?.future}</p>
+                  )}
+
+                </div>
+
+
+              </div>
+            )}
+
+            {/* <div className="glass p-6 rounded-xl mb-6">
               <h2 className="text-gold font-bold mb-3">Summary</h2>
 
               <p className="text-sm whitespace-pre-wrap">
@@ -117,7 +221,7 @@ This affects the ${article.category} sector significantly.
 ⚡ Key Takeaway:
 This is an important trend to watch closely.`}
               </p>
-            </div>
+            </div> */}
 
             {/* 💬 AI CHAT */}
             <div className="glass p-6 rounded-xl">

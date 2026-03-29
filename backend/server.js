@@ -123,33 +123,34 @@ app.post("/ai-story", async (req, res) => {
         }
 
         const prompt = `
-Analyze this news article and generate:
+You are an AI system.
 
-        1. Timeline(5 - 7 events with dates)
-        2. Key Players(name, role, impact)
-        3. Prediction
+Generate a story arc EXACTLY like this structure:
 
-Return STRICT JSON only.No explanation, no markdown.
+{
+  "timeline": [
+    {
+      "date": "Mar 2026",
+      "title": "Event title",
+      "sentiment": "positive | negative | neutral",
+      "detail": "Short explanation"
+    }
+  ],
+  "keyPlayers": [
+    {
+      "name": "Person/Org",
+      "role": "Who they are",
+      "impact": "Their impact"
+    }
+  ],
+  "prediction": "Future insight"
+}
 
-            Format:
-        {
-            "timeline": [
-                {
-                    "date": "",
-                    "title": "",
-                    "sentiment": "positive | negative | neutral",
-                    "detail": ""
-                }
-            ],
-                "keyPlayers": [
-                    {
-                        "name": "",
-                        "role": "",
-                        "impact": ""
-                    }
-                ],
-                    "prediction": ""
-        }
+STRICT RULES:
+- Return ONLY JSON
+- No explanation
+- No markdown
+- Follow format EXACTLY
 
         Article:
 ${article}
@@ -194,14 +195,55 @@ ${article}
         });
 
         // ✅ Safe JSON parsing
+        // let parsed;
+        // try {
+        //     // parsed = JSON.parse(response.text);
+        //     parsed = response.candidates[0].content.parts[0].text;
+        //     parsed = JSON.parse(parsed);
+        // } catch {
+        //     console.warn("⚠️ JSON parse failed, returning raw text");
+        //     parsed = { raw: response.text };
+        // }
+        // ✅ Safe JSON parsing (FIXED)
         let parsed;
+
         try {
-            // parsed = JSON.parse(response.text);
-            parsed = response.candidates[0].content.parts[0].text;
-            parsed = JSON.parse(parsed);
-        } catch {
-            console.warn("⚠️ JSON parse failed, returning raw text");
-            parsed = { raw: response.text };
+            let raw = response?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+            console.log("RAW AI:", raw); // debug
+
+            if (!raw) throw new Error("Empty AI response");
+
+            // 🔥 Extract JSON safely
+            const start = raw.indexOf("{");
+            const end = raw.lastIndexOf("}") + 1;
+
+            raw = raw.slice(start, end);
+
+            parsed = JSON.parse(raw);
+
+        } catch (err) {
+            console.error("❌ JSON parse failed:", err);
+
+            // 🔥 FALLBACK (VERY IMPORTANT)
+            parsed = {
+                timeline: [
+                    {
+                        date: "Now",
+                        title: "Fallback Story",
+                        sentiment: "neutral",
+                        detail: "AI response formatting failed"
+                    }
+                ],
+                keyPlayers: [
+                    {
+                        name: "System",
+                        role: "Fallback Mode",
+                        impact: "Ensures UI always works"
+                    }
+                ],
+                prediction: "AI output failed. Please retry."
+            };
         }
 
         res.json({ data: parsed });

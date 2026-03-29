@@ -43,7 +43,7 @@ const Navbar = () => {
               <Newspaper className="w-5 h-5 text-primary-foreground" />
             </div>
             <span className="text-lg font-bold tracking-tight font-['Space_Grotesk']">
-              My <span className="text-gradient-gold">AI News</span>
+               <span className="text-gradient-gold">Newsly</span>
             </span>
           </Link>
 

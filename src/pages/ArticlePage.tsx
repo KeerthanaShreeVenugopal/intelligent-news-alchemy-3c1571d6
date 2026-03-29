@@ -6,6 +6,7 @@ import VideoBackground from "@/components/VideoBackground";
 import ArticleTabs from "@/components/ArticleTabs";
 import Navbar from "@/components/Navbar";
 import { newsArticles, categoryColors } from "@/data/newsData";
+import { getTimeAgo } from "@/utils/timeAgo";
 
 const ArticlePage = () => {
   const { id } = useParams();
@@ -54,8 +55,11 @@ const ArticlePage = () => {
               <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${categoryColors[article.category]}`}>
                 {article.category}
               </span>
-              <span className="flex items-center gap-1 text-xs text-muted-foreground">
+              {/* <span className="flex items-center gap-1 text-xs text-muted-foreground">
                 <Clock className="w-3.5 h-3.5" /> {article.readTime}
+              </span> */}
+              <span className="text-xs text-muted-foreground">
+                {getTimeAgo(article.date)}
               </span>
               <span className="text-xs text-muted-foreground">{article.date}</span>
             </div>
@@ -72,7 +76,7 @@ const ArticlePage = () => {
             {/* AI Summary */}
             <div className="glass rounded-2xl p-6 mb-8 border-gold/20">
               <div className="flex items-center gap-2 mb-3">
-                <Sparkles className="w-5 h-5 text-gold" />
+                {/* <Sparkles className="w-5 h-5 text-gold" /> */}
                 <h3 className="text-sm font-semibold text-gold uppercase tracking-wider">Summary</h3>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed">

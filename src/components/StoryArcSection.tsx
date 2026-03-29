@@ -3,6 +3,7 @@ import AnimatedBackground from "./AnimatedBackground";
 import { GitBranch, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { newsArticles } from "@/data/newsData";
+import { useEffect, useState } from "react";
 
 const sentimentIcon = {
   positive: <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />,
@@ -25,9 +26,58 @@ const sentimentDot = {
 const StoryArcSection = () => {
   const { id } = useParams();
   const article = newsArticles.find((a) => a.id === id);
+  const [aiStory, setAiStory] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const timelineEvents = aiStory?.timeline || [];
+  const sentimentScore = {
+    positive: 1,
+    neutral: 0,
+    negative: -1,
+  };
 
-  // ✅ FETCH FROM newsData.ts
-  const timelineEvents = article?.story?.timeline || [];
+  const sentimentTrend = timelineEvents.map((event) => ({
+    value: sentimentScore[event.sentiment],
+  }));
+  // const handleGenerate = async () => {
+  //   try {
+  //     setLoading(true);
+  //     setAiStory(null); // reset
+
+  //     // const res = await fetch("http://localhost:5000/ai-story", {
+  //     //   method: "POST",
+  //     //   headers: {
+  //     //     "Content-Type": "application/json",
+  //     //   },
+  //     //   body: JSON.stringify({
+  //     //     article: article?.content,
+  //     //   }),
+  //     // });
+
+  //     // const data = await res.json();
+  //     // setAiStory(data.data);
+  //     const data = await res.json();
+
+  //     if (!data || !data.data) {
+  //       throw new Error("Invalid AI response");
+  //     }
+
+  //     setAiStory(data.data);
+  //   } catch (err) {
+  //     console.error("AI Story failed:", err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  const handleGenerate = async () => {
+    setLoading(true);
+    setAiStory(null);
+
+    // ⏳ simulate AI delay
+    setTimeout(() => {
+      setAiStory(article?.story); // 🔥 use mock data
+      setLoading(false);
+    }, 5000); // 5 seconds
+  };
 
   return (
     // <section id="tracker" className="relative py-32 px-6">
@@ -61,7 +111,7 @@ const StoryArcSection = () => {
           animate={{ opacity: 1, y: 0 }}
         >
           {/* TITLE */}
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <GitBranch className="w-5 h-5 text-electric" />
               <h3 className="text-lg font-bold">
@@ -74,60 +124,104 @@ const StoryArcSection = () => {
             </span>
           </div>
 
-          {/* 🔥 EMPTY STATE */}
-          {timelineEvents.length === 0 && (
+          <div className="flex justify-center mb-6">
+            <button
+              onClick={handleGenerate}
+              disabled={loading}
+              className="px-6 py-3 bg-electric text-white rounded-lg hover:opacity-90 disabled:opacity-50 text-base font-medium"
+            >
+              {loading ? "Generating..." : "Generate Story Arc ✨"}
+            </button>
+          </div>
+
+          {/* 🔥 LOADING / EMPTY */}
+          {/* {loading ? (
+            <p className="text-center text-muted-foreground">
+              Generating AI Story Arc...
+            </p>
+          ) : timelineEvents.length === 0 && (
             <p className="text-center text-muted-foreground">
               No story data available
+            </p>
+          )} */}
+          {loading && (
+            <p className="text-center text-muted-foreground">
+              Generating AI Story Arc...
             </p>
           )}
 
           {/* TIMELINE */}
-          <div className="relative">
-            <div className="absolute left-4 top-0 bottom-0 w-px bg-border/50" />
+          {!loading && aiStory?.timeline && (
+            <div className="relative">
+              <div className="absolute left-4 top-0 bottom-0 w-px bg-border/50" />
 
-            <div className="space-y-6">
-              {timelineEvents.map((event, i) => (
-                <motion.div
-                  key={i}
-                  className="relative pl-10"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                >
-                  {/* DOT */}
-                  <div
-                    className={`absolute left-[11px] top-2 w-2.5 h-2.5 rounded-full ${sentimentDot[event.sentiment]
-                      }`}
-                  />
-
-                  {/* CARD */}
-                  <div
-                    className={`p-4 rounded-xl bg-secondary/30 border ${sentimentColor[event.sentiment]
-                      }`}
+              <div className="space-y-6">
+                {timelineEvents.map((event, i) => (
+                  <motion.div
+                    key={i}
+                    className="relative pl-10"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.1 }}
                   >
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs text-muted-foreground">
-                        {event.date}
-                      </span>
-                      {sentimentIcon[event.sentiment]}
-                    </div>
+                    <div
+                      className={`absolute left-[11px] top-2 w-2.5 h-2.5 rounded-full ${sentimentDot[event.sentiment]}`}
+                    />
 
-                    <p className="text-sm font-medium">{event.title}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {event.detail}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
+                    <div
+                      className={`p-4 rounded-xl bg-secondary/30 border ${sentimentColor[event.sentiment]}`}
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs text-muted-foreground">
+                          {event.date}
+                        </span>
+                        {sentimentIcon[event.sentiment]}
+                      </div>
+
+                      <p className="text-sm font-medium">{event.title}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {event.detail}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
+          {/* 📊 SENTIMENT TREND */}
+          {!loading && aiStory?.timeline && (
+            <div className="mt-8">
+              <h3 className="text-sm text-electric mb-3">📊 Sentiment Trend</h3>
+
+              <div className="flex items-end gap-2 h-20">
+                {sentimentTrend.map((s, i) => (
+                  <div
+                    key={i}
+                    className={`w-4 rounded ${s.value > 0
+                      ? "bg-emerald-400"
+                      : s.value < 0
+                        ? "bg-red-400"
+                        : "bg-gray-400"
+                      }`}
+                    style={{
+                      height: `${Math.abs(s.value) * 40 + 10}px`,
+                    }}
+                  />
+                ))}
+              </div>
+
+              <p className="text-xs text-muted-foreground mt-2">
+                Tracks how sentiment evolves across events
+              </p>
+            </div>
+          )}
           {/* 👥 KEY PLAYERS */}
-          {article?.story?.keyPlayers && (
+          {!loading && aiStory?.keyPlayers && (
             <div className="mt-8">
               <h3 className="text-sm text-gold mb-3">👥 Key Players</h3>
 
               <div className="grid sm:grid-cols-2 gap-3">
-                {article.story.keyPlayers.map((player, i) => (
+                {aiStory.keyPlayers.map((player, i) => (
                   <div
                     key={i}
                     className="p-3 rounded-lg bg-secondary/30 border border-border/40"
@@ -144,17 +238,34 @@ const StoryArcSection = () => {
               </div>
             </div>
           )}
-          {/* 🔮 PREDICTION */}
-          <div className="mt-8 p-4 rounded-xl border border-gold/20">
-            <p className="text-xs text-gold mb-2">🔮 What to Watch Next</p>
 
-            <p className="text-sm text-muted-foreground">
-              {article?.story?.prediction || "No prediction available"}
-            </p>
-          </div>
+          {/* 🔮 PREDICTION */}
+          {!loading && aiStory?.prediction && (
+            <div className="mt-8 p-4 rounded-xl border border-gold/20">
+              <p className="text-xs text-gold mb-2">🔮 What to Watch Next</p>
+
+              <p className="text-sm text-muted-foreground">
+                {aiStory.prediction}
+              </p>
+            </div>
+          )}
+          {/* ⚠️ CONTRARIAN VIEW */}
+          {!loading && aiStory?.contrarian && (
+            <div className="mt-6 p-4 rounded-xl border border-red-400/20 bg-red-400/5">
+              <p className="text-xs text-red-400 mb-2">
+                ⚠️ Alternative Perspective
+              </p>
+
+              <p className="text-sm text-muted-foreground">
+                {aiStory.contrarian}
+              </p>
+            </div>
+          )}
+
         </motion.div>
       </div>
     </section>
+
   );
 };
 
