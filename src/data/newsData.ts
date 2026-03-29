@@ -34,6 +34,12 @@ export interface NewsArticle {
 
     // ✅ EXISTING
     prediction: string;
+    contrarian: string;
+    briefing: {
+      insights: string[];
+      risks: string[];
+      future: string;
+    };
   };
 
   // 🔥 AI Q&A (you can keep or remove later)
@@ -48,6 +54,233 @@ export interface NewsArticle {
 export const newsArticles: NewsArticle[] = [
   {
     id: "1",
+    title: "Global Tensions Escalate as Military Activity Increases Across Regions",
+    summary: "Rising geopolitical tensions spark global concerns, with increased military deployments and strained diplomatic relations.",
+    category: "Policy",
+    content: "Global tensions have intensified as major powers increase military readiness across multiple regions. NATO has strengthened its eastern defenses, while diplomatic talks remain stalled. Analysts warn that prolonged escalation could disrupt global trade and energy markets. Global geopolitical tensions have entered a critical phase as major powers increase military deployments, signaling a shift from strategic caution to active preparedness. The expansion of defense infrastructure by NATO in Eastern Europe, combined with naval activity in contested waters, reflects a growing concern over regional stability turning into broader conflict. Diplomatic channels remain open but strained. Negotiations mediated by the United Nations have yet to yield concrete de-escalation measures, while sanctions and counter-sanctions continue to intensify economic friction between nations.From an economic perspective, global markets are reacting sharply. Investors are shifting toward safe-haven assets such as gold and government bonds, while equities—especially in energy and defense sectors—are showing increased volatility. Supply chain disruptions are becoming more pronounced, particularly in energy exports, semiconductor production, and shipping routes.Cyber warfare has also emerged as a silent but powerful front. Governments report increased cyberattacks targeting financial systems, infrastructure, and communication networks, indicating that modern conflict is no longer limited to physical battlegrounds.",
+
+    date: "2026-03-29T13:30:00",
+    readTime: "4 min",
+    author: "Global Desk",
+
+    story: {
+      timeline: [
+        {
+          date: "2022",
+          title: "Major geopolitical conflicts intensify",
+          sentiment: "negative",
+          detail: "Regional conflicts and power rivalries begin escalating globally"
+        },
+        {
+          date: "2023",
+          title: "Defense spending increases worldwide",
+          sentiment: "negative",
+          detail: "Countries boost military budgets amid rising tensions"
+        },
+        {
+          date: "Early 2024",
+          title: "Strategic alliances strengthen",
+          sentiment: "negative",
+          detail: "NATO and other alliances expand coordination and deployments"
+        },
+        {
+          date: "Late 2024",
+          title: "Supply chain disruptions begin",
+          sentiment: "negative",
+          detail: "Global trade affected by geopolitical instability"
+        },
+        {
+          date: "Early 2025",
+          title: "Military exercises intensify",
+          sentiment: "negative",
+          detail: "Large-scale drills conducted across multiple regions"
+        },
+        {
+          date: "Mid 2025",
+          title: "Diplomatic tensions rise sharply",
+          sentiment: "negative",
+          detail: "Breakdown of key negotiations between major powers"
+        },
+        {
+          date: "Late 2025",
+          title: "Cyber warfare and sanctions increase",
+          sentiment: "negative",
+          detail: "Nations impose sanctions and engage in cyber conflicts"
+        },
+        {
+          date: "Jan 2026",
+          title: "Global markets show volatility",
+          sentiment: "negative",
+          detail: "Investors react to uncertainty and geopolitical risks"
+        },
+        {
+          date: "Feb 2026",
+          title: "Military readiness levels raised",
+          sentiment: "negative",
+          detail: "Troop deployments increase in sensitive regions"
+        },
+        {
+          date: "Mar 2026",
+          title: "Emergency diplomatic talks begin",
+          sentiment: "neutral",
+          detail: "Global leaders attempt to de-escalate tensions"
+        },
+        {
+          date: "Today",
+          title: "Global alert levels remain high",
+          sentiment: "negative",
+          detail: "Markets and governments remain on high alert"
+        }
+      ],
+
+      keyPlayers: [
+        { name: "NATO", role: "Military Alliance", impact: "Coordinates defense strategy" },
+        { name: "Global Superpowers", role: "Decision Makers", impact: "Drive geopolitical actions" },
+        { name: "United Nations", role: "Diplomatic Body", impact: "Attempts conflict resolution" }
+      ],
+
+      prediction: "Global tensions may continue to influence markets and trade flows.",
+      contrarian: "Despite rising tensions, strong economic interdependence may prevent large-scale conflict.",
+      briefing: {
+        insights: [
+          "Global tensions are escalating across multiple regions",
+          "Military alliances are strengthening rapidly",
+          "Markets are reacting negatively to uncertainty"
+        ],
+        risks: [
+          "Prolonged conflict could disrupt global trade",
+          "Energy prices may spike sharply",
+          "Financial markets may become volatile"
+        ],
+        future: "Future stability depends heavily on diplomatic negotiations and geopolitical developments."
+      }
+    }
+  },
+  {
+    id: "2",
+    title: "Global Tensions Rise as Major Powers Increase Military Activity",
+    summary: "Escalating geopolitical tensions raise concerns across global markets.",
+    category: "Policy",
+    content: "Global tensions are rising with increased military activity and diplomatic strain across regions, impacting markets and global stability.",
+
+    date: "2026-03-29T12:25:00",
+    readTime: "4 min",
+    author: "Global Desk",
+
+    story: {
+      timeline: [
+        { date: "2024", title: "Regional tensions rise", sentiment: "negative", detail: "Conflicts intensify across regions" },
+        { date: "2025", title: "Military buildup increases", sentiment: "negative", detail: "Countries expand defense strategies" },
+        { date: "2026", title: "Global alert rises", sentiment: "negative", detail: "Markets react to uncertainty" }
+      ],
+
+      keyPlayers: [
+        { name: "Global Leaders", role: "Decision Makers", impact: "Drive geopolitical actions" },
+        { name: "NATO", role: "Alliance", impact: "Coordinates defense strategy" }
+      ],
+
+      prediction: "Tensions may continue impacting global markets and trade.",
+      contrarian: "Despite tensions, diplomacy and economic ties may prevent large-scale conflict.",
+      briefing: {
+        insights: [
+          "Military activity is increasing across multiple regions",
+          "Global markets are reacting cautiously",
+          "Diplomatic tensions are rising between major powers"
+        ],
+        risks: [
+          "Escalation could disrupt global trade",
+          "Investor confidence may decline",
+          "Energy and commodity prices may spike"
+        ],
+        future: "Future developments depend on diplomatic negotiations and geopolitical stability."
+      }
+    }
+  }
+  ,
+  {
+    id: "3",
+    title: "Tech Stocks Rally as AI Adoption Accelerates Globally",
+    summary: "Global markets surged as companies reported strong growth driven by AI integration.",
+    category: "Tech",
+    content: "Global technology stocks saw a sharp rally as companies reported strong earnings driven by rapid AI adoption. Analysts highlight increased enterprise spending on automation and AI tools.",
+
+    date: "2026-03-28T18:00:00",
+    readTime: "3 min",
+    author: "Market Desk",
+
+    story: {
+      timeline: [
+        { date: "2024", title: "AI adoption begins", sentiment: "positive", detail: "Companies explore AI integration" },
+        { date: "2025", title: "Enterprise AI spending rises", sentiment: "positive", detail: "Budgets increase significantly" },
+        { date: "Mar 2026", title: "Earnings beat expectations", sentiment: "positive", detail: "AI boosts revenue growth" }
+      ],
+
+      keyPlayers: [
+        { name: "Tech Companies", role: "Innovators", impact: "Drive AI adoption" },
+        { name: "Investors", role: "Market Participants", impact: "Push stock valuations higher" }
+      ],
+
+      prediction: "AI-driven growth could continue to fuel tech stock performance.",
+      contrarian: "High valuations may lead to corrections if growth slows unexpectedly.",
+      briefing: {
+        insights: [
+          "AI adoption is accelerating across industries",
+          "Tech companies are reporting strong earnings",
+          "Investor confidence in AI-driven growth is rising"
+        ],
+        risks: [
+          "Tech stocks may be overvalued",
+          "Regulation around AI could tighten",
+          "Growth may slow if adoption plateaus"
+        ],
+        future: "AI will continue to drive innovation, but sustainability of growth will be closely watched."
+      }
+    }
+  },
+  {
+    id: "4",
+    title: "Oil Prices Surge Amid Supply Concerns and Global Uncertainty",
+    summary: "Crude oil prices spike due to supply disruptions and geopolitical tensions.",
+    category: "Finance",
+    content: "Oil prices surged globally as supply concerns intensified amid geopolitical tensions. Analysts warn that sustained high prices could impact inflation and economic growth.",
+
+    date: "2026-03-27T16:00:00",
+    readTime: "4 min",
+    author: "Energy Desk",
+
+    story: {
+      timeline: [
+        { date: "2025", title: "Supply constraints emerge", sentiment: "negative", detail: "Production issues affect supply" },
+        { date: "Early 2026", title: "Demand rises globally", sentiment: "positive", detail: "Economic recovery boosts demand" },
+        { date: "Mar 2026", title: "Oil prices spike", sentiment: "negative", detail: "Markets react to uncertainty" }
+      ],
+
+      keyPlayers: [
+        { name: "OPEC", role: "Oil Producers", impact: "Control supply levels" },
+        { name: "Global Markets", role: "Consumers", impact: "React to price changes" }
+      ],
+
+      prediction: "Oil prices may remain volatile depending on geopolitical developments.",
+      contrarian: "Alternative energy adoption could reduce long-term dependence on oil.",
+      briefing: {
+        insights: [
+          "Oil supply concerns are driving price increases",
+          "Global demand remains strong",
+          "Geopolitical tensions are impacting energy markets"
+        ],
+        risks: [
+          "High oil prices may increase inflation",
+          "Economic growth could slow down",
+          "Energy market volatility may rise"
+        ],
+        future: "Oil prices will remain volatile depending on global supply and geopolitical developments."
+      }
+    }
+  },
+
+  {
+
+    id: "5",
     title: "RBI Holds Rates Steady Amid Global Uncertainty",
     summary: "The Reserve Bank of India maintained its benchmark repo rate at 6.5%, citing persistent inflation concerns and global headwinds.",
     category: "Finance",
@@ -102,7 +335,7 @@ export const newsArticles: NewsArticle[] = [
           detail: "Balances growth with inflation risks"
         }
       ],
-    
+
       keyPlayers: [
         {
           name: "Shaktikanta Das",
@@ -125,8 +358,23 @@ export const newsArticles: NewsArticle[] = [
           impact: "Transmit rate changes to loans and deposits"
         }
       ],
-    
-      prediction: "RBI is likely to maintain a cautious stance, with gradual rate cuts only if inflation stabilizes sustainably."
+
+      prediction: "RBI is likely to maintain a cautious stance, with gradual rate cuts only if inflation stabilizes sustainably.",
+      contrarian:
+        "Despite stable rates, persistent food inflation and global uncertainty could force tighter monetary policy, delaying expected rate cuts.",
+      briefing: {
+        insights: [
+          "RBI is maintaining a cautious monetary policy stance",
+          "Inflation remains a key concern",
+          "Markets expected stability in interest rates"
+        ],
+        risks: [
+          "Food inflation may rise further",
+          "Global slowdown may impact India's growth",
+          "Delay in rate cuts could affect borrowing"
+        ],
+        future: "RBI decisions will depend on inflation trends and global economic conditions."
+      }
     },
 
     qa: {
@@ -138,7 +386,7 @@ export const newsArticles: NewsArticle[] = [
   },
 
   {
-    id: "2",
+    id: "6",
     title: "Zepto Raises $500M in Pre-IPO Round",
     summary: "Quick-commerce unicorn Zepto secures massive funding as it prepares for a public listing later this year.",
     category: "Startup",
@@ -193,7 +441,7 @@ export const newsArticles: NewsArticle[] = [
           detail: "Investor confidence ahead of public listing"
         }
       ],
-    
+
       keyPlayers: [
         {
           name: "Aadit Palicha",
@@ -216,8 +464,23 @@ export const newsArticles: NewsArticle[] = [
           impact: "Approves IPO and listing compliance"
         }
       ],
-    
-      prediction: "Zepto is expected to go public soon, potentially becoming a dominant player in India’s quick-commerce sector."
+
+      prediction: "Zepto is expected to go public soon, potentially becoming a dominant player in India’s quick-commerce sector.",
+      contrarian:
+        "While growth is strong, intense competition and pressure on margins could impact long-term profitability.",
+      briefing: {
+        insights: [
+          "Zepto is scaling rapidly with strong investor confidence",
+          "Quick-commerce market is expanding in India",
+          "IPO plans indicate maturity of the startup"
+        ],
+        risks: [
+          "Competition from Blinkit and Instamart",
+          "Profitability challenges in quick commerce",
+          "High operational costs"
+        ],
+        future: "Zepto may go public soon, but long-term success depends on profitability."
+      }
     },
 
     qa: {
@@ -229,7 +492,7 @@ export const newsArticles: NewsArticle[] = [
   },
 
   {
-    id: "3",
+    id: "7",
     title: "India Semiconductor Fab Begins",
     summary: "The $15 billion chip fabrication facility marks India's entry into advanced semiconductor manufacturing.",
     category: "Tech",
@@ -278,7 +541,7 @@ export const newsArticles: NewsArticle[] = [
           detail: "India enters semiconductor manufacturing"
         }
       ],
-    
+
       keyPlayers: [
         {
           name: "Narendra Modi",
@@ -301,8 +564,23 @@ export const newsArticles: NewsArticle[] = [
           impact: "Funds and supports infrastructure"
         }
       ],
-    
-      prediction: "India could become a key semiconductor hub, reducing import dependency and strengthening global supply chains."
+
+      prediction: "India could become a key semiconductor hub, reducing import dependency and strengthening global supply chains.",
+      contrarian:
+        "Despite strong progress, India may face technological and supply chain challenges compared to established global semiconductor leaders.",
+      briefing: {
+        insights: [
+          "India is entering semiconductor manufacturing",
+          "Government support is driving tech independence",
+          "Global partnerships are strengthening capabilities"
+        ],
+        risks: [
+          "High capital and technology requirements",
+          "Dependence on global expertise",
+          "Execution delays may occur"
+        ],
+        future: "India could become a semiconductor hub, but progress will take time."
+      }
     },
 
     qa: {
@@ -314,7 +592,7 @@ export const newsArticles: NewsArticle[] = [
   },
 
   {
-    id: "4",
+    id: "8",
     title: "Union Budget 2026 Highlights",
     summary: "Finance Minister unveils a growth-oriented budget with significant tax reforms and infrastructure spending.",
     category: "Policy",
@@ -357,7 +635,7 @@ export const newsArticles: NewsArticle[] = [
           detail: "Execution challenges and fiscal concerns emerge"
         }
       ],
-    
+
       keyPlayers: [
         {
           name: "Nirmala Sitharaman",
@@ -380,8 +658,23 @@ export const newsArticles: NewsArticle[] = [
           impact: "React to policy signals and economic outlook"
         }
       ],
-    
-      prediction: "If executed effectively, the budget could accelerate India's growth, but fiscal deficit risks remain a concern."
+
+      prediction: "If executed effectively, the budget could accelerate India's growth, but fiscal deficit risks remain a concern.",
+      contrarian:
+        "While growth-focused, concerns remain over fiscal deficit sustainability and execution challenges in large-scale spending.",
+      briefing: {
+        insights: [
+          "Government is focusing on infrastructure and manufacturing",
+          "Tax reforms aim to boost business growth",
+          "AI and digital sectors are receiving strong support"
+        ],
+        risks: [
+          "Fiscal deficit concerns remain",
+          "Execution challenges in large projects",
+          "Global slowdown may impact outcomes"
+        ],
+        future: "If implemented well, the budget could accelerate India's economic growth."
+      }
     },
 
     qa: {
@@ -392,7 +685,7 @@ export const newsArticles: NewsArticle[] = [
     }
   },
   {
-    id: "5",
+    id: "9",
     title: "OpenAI Partners with Reliance for India AI Push",
     summary: "Strategic partnership to bring advanced AI models to Indian enterprises and consumers through Jio platforms.",
     category: "Tech",
@@ -435,7 +728,7 @@ export const newsArticles: NewsArticle[] = [
           detail: "Startup and enterprise adoption surges"
         }
       ],
-    
+
       keyPlayers: [
         {
           name: "Sam Altman",
@@ -458,8 +751,23 @@ export const newsArticles: NewsArticle[] = [
           impact: "Build applications using AI infrastructure"
         }
       ],
-    
-      prediction: "India could become one of the largest AI markets globally, accelerating digital transformation across sectors."
+
+      prediction: "India could become one of the largest AI markets globally, accelerating digital transformation across sectors.",
+      contrarian:
+        "Despite massive scale, challenges around data privacy, infrastructure, and equitable access could slow adoption.",
+      briefing: {
+        insights: [
+          "AI adoption in India is scaling rapidly",
+          "Partnership enables access to millions of users",
+          "Focus on Indian language AI is increasing"
+        ],
+        risks: [
+          "Data privacy concerns",
+          "Infrastructure limitations",
+          "Unequal access to AI technology"
+        ],
+        future: "India may become a global leader in AI adoption and innovation."
+      }
     },
 
     qa: {
@@ -470,7 +778,7 @@ export const newsArticles: NewsArticle[] = [
     },
   },
   {
-    id: "6",
+    id: "10",
     title: "Adani Group Announces $20B Green Energy Investment",
     summary: "Conglomerate doubles down on renewable energy with massive solar and wind capacity expansion plans.",
     category: "Finance",
@@ -513,7 +821,7 @@ export const newsArticles: NewsArticle[] = [
           detail: "Global leadership in solar energy"
         }
       ],
-    
+
       keyPlayers: [
         {
           name: "Gautam Adani",
@@ -536,8 +844,23 @@ export const newsArticles: NewsArticle[] = [
           impact: "Monitor sustainability impact"
         }
       ],
-    
-      prediction: "Adani could emerge as a global renewable leader, but execution and regulatory scrutiny remain key risks."
+
+      prediction: "Adani could emerge as a global renewable leader, but execution and regulatory scrutiny remain key risks.",
+      contrarian:
+        "While ambitious, execution risks and environmental concerns could impact long-term sustainability goals.",
+      briefing: {
+        insights: [
+          "Massive investment in renewable energy",
+          "India is pushing towards sustainability",
+          "Global partnerships are supporting expansion"
+        ],
+        risks: [
+          "Execution and regulatory challenges",
+          "Environmental concerns",
+          "High capital requirements"
+        ],
+        future: "India could emerge as a global renewable energy leader."
+      }
     },
 
     qa: {
@@ -548,7 +871,7 @@ export const newsArticles: NewsArticle[] = [
     }
   },
   {
-    id: "7",
+    id: "11",
     title: "SEBI Tightens IPO Disclosure Norms",
     summary: "New regulations require enhanced financial transparency from companies seeking public listings in India.",
     category: "Policy",
@@ -590,7 +913,7 @@ export const newsArticles: NewsArticle[] = [
           detail: "Fewer but higher-quality listings"
         }
       ],
-    
+
       keyPlayers: [
         {
           name: "Madhabi Puri Buch",
@@ -613,8 +936,23 @@ export const newsArticles: NewsArticle[] = [
           impact: "Gain better transparency"
         }
       ],
-    
-      prediction: "IPO market may become more stable and trustworthy, though overall listing activity could slow down."
+
+      prediction: "IPO market may become more stable and trustworthy, though overall listing activity could slow down.",
+      contrarian:
+        "Stricter norms may discourage smaller companies from going public, potentially slowing IPO activity.",
+      briefing: {
+        insights: [
+          "SEBI is increasing transparency in IPOs",
+          "Investor protection is a priority",
+          "Companies must disclose detailed financials"
+        ],
+        risks: [
+          "Stricter rules may reduce IPO activity",
+          "Smaller firms may struggle to comply",
+          "Market slowdown in listings"
+        ],
+        future: "IPO market may become more stable and trustworthy."
+      }
     },
 
     qa: {
@@ -625,7 +963,7 @@ export const newsArticles: NewsArticle[] = [
     }
   },
   {
-    id: "8",
+    id: "12",
     title: "Flipkart's AI Shopping Assistant Crosses 100M Users",
     summary: "The conversational commerce feature has transformed online shopping in India with personalized recommendations.",
     category: "Startup",
@@ -661,7 +999,7 @@ export const newsArticles: NewsArticle[] = [
           detail: "Voice, image-based search added"
         }
       ],
-    
+
       keyPlayers: [
         {
           name: "Kalyan Krishnamurthy",
@@ -684,8 +1022,23 @@ export const newsArticles: NewsArticle[] = [
           impact: "Adopt AI for shopping decisions"
         }
       ],
-    
-      prediction: "AI-driven commerce could redefine online shopping, with conversational interfaces becoming standard."
+
+      prediction: "AI-driven commerce could redefine online shopping, with conversational interfaces becoming standard.",
+      contrarian:
+        "Heavy reliance on AI could raise concerns around data privacy and reduce human-driven decision-making in commerce.",
+      briefing: {
+        insights: [
+          "AI is transforming online shopping",
+          "User adoption is growing rapidly",
+          "Personalized recommendations increase spending"
+        ],
+        risks: [
+          "Data privacy concerns",
+          "Dependence on AI systems",
+          "Competition from other platforms"
+        ],
+        future: "AI-driven commerce could become the standard in e-commerce."
+      }
     },
 
     qa: {
@@ -697,7 +1050,7 @@ export const newsArticles: NewsArticle[] = [
 
   },
   {
-    id: "9",
+    id: "13",
     title: "India Stack 3.0: Government Launches Unified AI Platform",
     summary: "New digital public infrastructure aims to democratize AI access for startups and small businesses.",
     category: "Tech",
@@ -734,7 +1087,7 @@ export const newsArticles: NewsArticle[] = [
           detail: "Cost savings of 60% reported"
         }
       ],
-    
+
       keyPlayers: [
         {
           name: "Ashwini Vaishnaw",
@@ -757,8 +1110,23 @@ export const newsArticles: NewsArticle[] = [
           impact: "Provide compute resources"
         }
       ],
-    
-      prediction: "India could lead in open AI infrastructure, enabling mass-scale innovation across industries."
+
+      prediction: "India could lead in open AI infrastructure, enabling mass-scale innovation across industries.",
+      contrarian:
+        "Adoption may be uneven due to infrastructure gaps and lack of AI readiness among smaller businesses.",
+      briefing: {
+        insights: [
+          "Government is democratizing AI access",
+          "Startups benefit from lower costs",
+          "Digital infrastructure is expanding rapidly"
+        ],
+        risks: [
+          "Infrastructure gaps in smaller regions",
+          "Limited AI readiness among businesses",
+          "Adoption challenges"
+        ],
+        future: "India could lead in open AI infrastructure globally."
+      }
     },
 
     qa: {
@@ -769,7 +1137,7 @@ export const newsArticles: NewsArticle[] = [
     }
   },
   {
-    id: "10",
+    id: "14",
     title: "PhonePe Enters Wealth Management with AI-First Approach",
     summary: "Digital payments giant launches robo-advisory platform targeting India's emerging middle-class investors.",
     category: "Finance",
@@ -805,7 +1173,7 @@ export const newsArticles: NewsArticle[] = [
           detail: "Retail investors enter markets"
         }
       ],
-    
+
       keyPlayers: [
         {
           name: "Sameer Nigam",
@@ -828,8 +1196,23 @@ export const newsArticles: NewsArticle[] = [
           impact: "Gain access to investing"
         }
       ],
-    
-      prediction: "AI-driven wealth management could become mainstream, transforming how Indians invest."
+
+      prediction: "AI-driven wealth management could become mainstream, transforming how Indians invest.",
+      contrarian:
+        "AI-driven investing may face trust issues among users unfamiliar with automated financial decision-making.",
+      briefing: {
+        insights: [
+          "AI is entering wealth management",
+          "Financial inclusion is increasing",
+          "Low entry barriers attract new investors"
+        ],
+        risks: [
+          "Trust issues with AI advisors",
+          "Regulatory challenges",
+          "Market volatility affecting new investors"
+        ],
+        future: "AI-driven investing could become mainstream in India."
+      }
     },
 
     qa: {
@@ -837,9 +1220,9 @@ export const newsArticles: NewsArticle[] = [
       impact: "Improves financial inclusion.",
       future: "AI advisors may replace traditional ones.",
       default: "Fintech is evolving rapidly."
-    }
-  },
+    },
 
+  },
 
 
 ];

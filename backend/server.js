@@ -84,83 +84,146 @@ Return STRICT JSON:
 // 📊 STORY GENERATION
 // ==============================
 app.post("/ai-story", async (req, res) => {
-  try {
-    const { article } = req.body;
+    try {
+        const { article } = req.body;
 
-    if (!article) {
-      return res.status(400).json({ error: "Missing article" });
-    }
+        if (!article) {
+            return res.status(400).json({
+                error: "Article is required",
+            });
+        }
 
-    const prompt = `
-Generate SHORT story arc in JSON.
+        const prompt = `
+You are an AI system.
+
+Generate a story arc EXACTLY like this structure:
 
 {
-  "timeline": [],
-  "keyPlayers": [],
-  "prediction": ""
+  "timeline": [
+    {
+      "date": "Mar 2026",
+      "title": "Event title",
+      "sentiment": "positive | negative | neutral",
+      "detail": "Short explanation"
+    }
+  ],
+  "keyPlayers": [
+    {
+      "name": "Person/Org",
+      "role": "Who they are",
+      "impact": "Their impact"
+    }
+  ],
+  "prediction": "Future insight"
 }
 
-Article:
+STRICT RULES:
+- Return ONLY JSON
+- No explanation
+- No markdown
+- Follow format EXACTLY
+
+        Article:
 ${article}
-`;
+        `;
 
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: prompt,
-    });
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: prompt,
 
-    let parsed;
+            config: {
+                responseMimeType: "application/json",
+                responseSchema: {
+                    type: "object",
+                    properties: {
+                        timeline: {
+                            type: "array",
+                            items: {
+                                type: "object",
+                                properties: {
+                                    date: { type: "string" },
+                                    title: { type: "string" },
+                                    sentiment: { type: "string" },
+                                    detail: { type: "string" },
+                                },
+                            },
+                        },
+                        keyPlayers: {
+                            type: "array",
+                            items: {
+                                type: "object",
+                                properties: {
+                                    name: { type: "string" },
+                                    role: { type: "string" },
+                                    impact: { type: "string" },
+                                },
+                            },
+                        },
+                        prediction: { type: "string" },
+                    },
+                },
+            },
+        });
 
-    try {
-      let raw = response.candidates[0].content.parts[0].text;
+        // ✅ Safe JSON parsing
+        // let parsed;
+        // try {
+        //     // parsed = JSON.parse(response.text);
+        //     parsed = response.candidates[0].content.parts[0].text;
+        //     parsed = JSON.parse(parsed);
+        // } catch {
+        //     console.warn("⚠️ JSON parse failed, returning raw text");
+        //     parsed = { raw: response.text };
+        // }
+        // ✅ Safe JSON parsing (FIXED)
+        let parsed;
 
-      raw = raw.replace(/```json/g, "").replace(/```/g, "").trim();
+        try {
+            let raw = response?.candidates?.[0]?.content?.parts?.[0]?.text;
 
-      const start = raw.indexOf("{");
-      const end = raw.lastIndexOf("}");
+            console.log("RAW AI:", raw); // debug
 
-      if (start !== -1 && end !== -1) {
-        raw = raw.substring(start, end + 1);
-      }
+            if (!raw) throw new Error("Empty AI response");
 
-      parsed = JSON.parse(raw);
-    } catch {
-      parsed = {
-        timeline: [],
-        keyPlayers: [],
-        prediction: "⚠️ Failed to generate story",
-      };
-    }
+            // 🔥 Extract JSON safely
+            const start = raw.indexOf("{");
+            const end = raw.lastIndexOf("}") + 1;
 
-    res.json({ data: parsed });
+            raw = raw.slice(start, end);
 
-  } catch (err) {
-    console.error("❌ STORY ERROR:", err);
-    res.status(500).json({ error: "Story failed" });
-  }
-});
+            parsed = JSON.parse(raw);
 
-// ==============================
-// 🌐 TRANSLATION (FIXED)
-// ==============================
-app.post("/translate", async (req, res) => {
-  try {
-    const { text, target } = req.body;
+        } catch (err) {
+            console.error("❌ JSON parse failed:", err);
 
-    if (!text || !target) {
-      return res.status(400).json({ translatedText: "" });
-    }
+            // 🔥 FALLBACK (VERY IMPORTANT)
+            parsed = {
+                timeline: [
+                    {
+                        date: "Now",
+                        title: "Fallback Story",
+                        sentiment: "neutral",
+                        detail: "AI response formatting failed"
+                    }
+                ],
+                keyPlayers: [
+                    {
+                        name: "System",
+                        role: "Fallback Mode",
+                        impact: "Ensures UI always works"
+                    }
+                ],
+                prediction: "AI output failed. Please retry."
+            };
+        }
 
-    const url =
-      "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=" +
-      target +
-      "&dt=t&q=" +
-      encodeURIComponent(text);
+        res.json({ data: parsed });
 
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error("Translate API failed");
+    } catch (err) {
+        console.error("🔥 STORY ERROR:", err);
+        res.status(500).json({
+            error: err.message || "Story AI failed",
+        });
     }
 
     const data = await response.json();

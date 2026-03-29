@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Clock, ArrowRight } from "lucide-react";
 import { NewsArticle, categoryColors } from "@/data/newsData";
+import { getTimeAgo } from "@/utils/timeAgo";
 
 const NewsCard = ({ article, index }: { article: NewsArticle; index: number }) => {
   return (
@@ -33,7 +34,10 @@ const NewsCard = ({ article, index }: { article: NewsArticle; index: number }) =
           <div className="mt-4 sm:mt-5 flex items-center justify-between">
             <div className="flex items-center gap-1.5 text-xs text-foreground/50">
               <Clock className="w-3.5 h-3.5" />
-              <span>{article.readTime}</span>
+              {/* <span>{article.readTime}</span> */}
+              <span className="text-xs text-muted-foreground">
+                {getTimeAgo(article.date)}
+              </span>
               <span className="mx-1">·</span>
               <span>{article.date}</span>
             </div>

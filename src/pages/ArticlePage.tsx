@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import ArticleTabs from "@/components/ArticleTabs";
 import Navbar from "@/components/Navbar";
 import { newsArticles, categoryColors } from "@/data/newsData";
+import { getTimeAgo } from "@/utils/timeAgo";
 
 // ✅ GLOBAL LANGUAGE
 import { useLanguage } from "@/components/Language";
@@ -110,8 +111,11 @@ const ArticlePage = () => {
               <span className={`px-3 py-1 text-xs border ${categoryColors[article.category]}`}>
                 {article.category}
               </span>
-              <span className="text-xs flex items-center gap-1">
-                <Clock size={12} /> {article.readTime}
+              {/* <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                <Clock className="w-3.5 h-3.5" /> {article.readTime}
+              </span> */}
+              <span className="text-xs text-muted-foreground">
+                {getTimeAgo(article.date)}
               </span>
               <span className="text-xs">{article.date}</span>
             </div>
@@ -135,6 +139,16 @@ const ArticlePage = () => {
               <User size={14} /> {article.author}
             </div>
 
+            {/* AI Summary */}
+            <div className="glass rounded-2xl p-6 mb-8 border-gold/20">
+              <div className="flex items-center gap-2 mb-3">
+                {/* <Sparkles className="w-5 h-5 text-gold" /> */}
+                <h3 className="text-sm font-semibold text-gold uppercase tracking-wider">Summary</h3>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {article.summary} This article explores the broader implications for India's business landscape, examining how stakeholders from retail investors to institutional players are positioning themselves in response to these developments.
+              </p>
+            </div>
             {/* SUMMARY */}
             <div className="border p-4 rounded mb-6">
               <b className="flex items-center gap-2 mb-2">
