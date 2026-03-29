@@ -55,6 +55,7 @@ export const newsArticles: NewsArticle[] = [
     date: "Mar 18, 2026",
     readTime: "4 min",
     author: "Priya Sharma",
+    image: "https://resize.indiatvnews.com/en/resize/newbucket/1200_-/2020/05/rbi-governor-shaktikanta-das-27-march-2020-1590115707.jpg",
 
     story: {
       timeline: [
@@ -145,6 +146,7 @@ export const newsArticles: NewsArticle[] = [
     date: "Mar 17, 2026",
     readTime: "5 min",
     author: "Rohan Mehta",
+    image: "https://akm-img-a-in.tosshub.com/businesstoday/images/story/202602/6995b9dc31c8b-zepto-dark-store-at-ai-impact-summit-2026-180838567-16x9.png",
 
     story: {
       timeline: [
@@ -235,6 +237,7 @@ export const newsArticles: NewsArticle[] = [
     date: "Mar 16, 2026",
     readTime: "6 min",
     author: "Ananya Desai",
+    image:"https://www.pcl.com/content/dam/insights-images/Microchip%20Manufacturing.jpg",
 
     story: {
       timeline: [
@@ -319,6 +322,7 @@ export const newsArticles: NewsArticle[] = [
     date: "Mar 15, 2026",
     readTime: "7 min",
     author: "Vikram Singh",
+    image:"https://images.hindustantimes.com/img/2024/07/23/1600x900/Members-during-the-presentation-of-Union-Budget-in_1721716787192.jpg",
 
     story: {
       timeline: [
@@ -396,6 +400,7 @@ export const newsArticles: NewsArticle[] = [
     date: "Mar 14, 2026",
     readTime: "5 min",
     author: "Neha Kapoor",
+    image:"https://assets.telecomtv.com/assets/telecomtv/rcp-mumbai-18839.jpg?w=1200",
 
     story: {
       timeline: [
@@ -473,6 +478,7 @@ export const newsArticles: NewsArticle[] = [
     date: "Mar 13, 2026",
     readTime: "5 min",
     author: "Arjun Patel",
+    image:"https://i.insider.com/637b88f12c8b9a0018cbdb77?format=jpeg&width=1200",
 
     story: {
       timeline: [
@@ -550,7 +556,7 @@ export const newsArticles: NewsArticle[] = [
     date: "Mar 12, 2026",
     readTime: "4 min",
     author: "Siddharth Jain",
-
+    image:"https://bsmedia.business-standard.com/_media/bs/img/article/2025-10/17/full/1760724574-5817.jpg",
     story: {
       timeline: [
         {
@@ -627,6 +633,7 @@ export const newsArticles: NewsArticle[] = [
     date: "Mar 11, 2026",
     readTime: "5 min",
     author: "Meera Rajendran",
+    image:"https://static.startuptalky.com/2024/03/Flipkart-Quick-Commerce-StartupTalky.jpg",
     story: {
       timeline: [
         {
@@ -698,6 +705,7 @@ export const newsArticles: NewsArticle[] = [
     date: "Mar 10, 2026",
     readTime: "6 min",
     author: "Karthik Subramaniam",
+    image:"https://framerusercontent.com/images/ZHfo1O8H8PpzDiRGQexDwPBtZpA.png",
 
     story: {
       timeline: [
@@ -769,7 +777,7 @@ export const newsArticles: NewsArticle[] = [
     date: "Mar 9, 2026",
     readTime: "5 min",
     author: "Divya Narayan",
-
+    image:"https://zet-cms-production-b2c.s3.ap-south-1.amazonaws.com/How_to_Transfer_Money_From_Phonepe_Wallet_to_Bank_Account_7c5376c792.jpg",
     story: {
       timeline: [
         {
