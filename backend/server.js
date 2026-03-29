@@ -1,39 +1,43 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import fetch from "node-fetch";
 import { GoogleGenAI } from "@google/genai";
 
 dotenv.config();
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-// ✅ Check API Key
+// ==============================
+// 🔑 CHECK API KEY
+// ==============================
 if (!process.env.GEMINI_API_KEY) {
-    console.error("❌ GEMINI_API_KEY is missing in .env");
-    process.exit(1);
+  console.error("❌ GEMINI_API_KEY missing in .env");
+  process.exit(1);
 }
 
-// 🔥 Gemini setup (NEW SDK)
+// ==============================
+// 🤖 GEMINI SETUP
+// ==============================
 const ai = new GoogleGenAI({
-    apiKey: process.env.GEMINI_API_KEY,
+  apiKey: process.env.GEMINI_API_KEY,
 });
 
 // ==============================
-// 🚀 AI AGENT ROUTE
+// 🤖 AI AGENT (Q&A)
 // ==============================
 app.post("/ai-agent", async (req, res) => {
-    try {
-        const { article, question, userType } = req.body;
+  try {
+    const { article, question, userType } = req.body;
 
-        if (!article || !question) {
-            return res.status(400).json({
-                error: "Article and question are required",
-            });
-        }
+    if (!article || !question) {
+      return res.status(400).json({ error: "Missing inputs" });
+    }
 
-        const prompt = `
+    const prompt = `
 You are an AI news analyst.
 
 User Type: ${userType || "General"}
@@ -41,76 +45,43 @@ User Type: ${userType || "General"}
 Article:
 ${article}
 
-User Question:
+Question:
 ${question}
-Return the answer in STRICT JSON format.
 
-Format:
+Return STRICT JSON:
+
 {
-  "points": [
-    "point 1",
-    "point 2",
-    "point 3"
-  ]
+  "points": ["point 1", "point 2", "point 3"]
 }
-
-Rules:
-- No markdown
-- No **bold**
-- No paragraphs
-- Only clean JSON
-
-Give a clear, structured answer in points.
 `;
 
-        const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
-            contents: prompt,
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+      },
+    });
 
-            config: {
-                responseMimeType: "application/json",
-                responseSchema: {
-                    type: "object",
-                    properties: {
-                        points: {
-                            type: "array",
-                            items: { type: "string" },
-                        },
-                    },
-                },
-            },
-        });
+    let parsed;
 
-        // ✅ Parse JSON
-        // let parsed;
-        // try {
-        //     parsed = JSON.parse(response.text);
-        // } catch {
-        //     console.error("❌ JSON failed:", response.text);
-        //     parsed = { points: ["Error parsing AI response"] };
-        // }
-        let parsed;
-
-        try {
-            const raw = response.candidates[0].content.parts[0].text;
-            parsed = JSON.parse(raw);
-        } catch (err) {
-            console.error("❌ JSON failed:", response);
-            parsed = { points: ["Error parsing AI response"] };
-        }
-
-        res.json({ answer: parsed });
-
-    } catch (err) {
-        console.error("🔥 AI AGENT ERROR:", err);
-        res.status(500).json({
-            error: err.message || "AI failed",
-        });
+    try {
+      const raw = response.candidates[0].content.parts[0].text;
+      parsed = JSON.parse(raw);
+    } catch {
+      parsed = { points: ["⚠️ AI parsing failed"] };
     }
+
+    res.json({ answer: parsed });
+
+  } catch (err) {
+    console.error("❌ AI ERROR:", err);
+    res.status(500).json({ error: "AI failed" });
+  }
 });
 
 // ==============================
-// 🚀 STORY ARC GENERATION
+// 📊 STORY GENERATION
 // ==============================
 app.post("/ai-story", async (req, res) => {
     try {
@@ -254,13 +225,28 @@ ${article}
             error: err.message || "Story AI failed",
         });
     }
+
+    const data = await response.json();
+
+    const translatedText = data[0]
+      .map((item) => item[0])
+      .join("");
+
+    console.log("🌐 Translated:", translatedText);
+
+    res.json({ translatedText });
+
+  } catch (err) {
+    console.error("❌ TRANSLATE ERROR:", err);
+    res.status(500).json({ translatedText: "" });
+  }
 });
 
 // ==============================
 // 🧪 HEALTH CHECK
 // ==============================
 app.get("/", (req, res) => {
-    res.send("✅ AI Server is running...");
+  res.send("✅ Server running");
 });
 
 // ==============================
@@ -269,5 +255,5 @@ app.get("/", (req, res) => {
 const PORT = 5000;
 
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });

@@ -1,5 +1,3 @@
-// ✅ ONLY UI ENHANCED VERSION (spacing fixed)
-
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import VideoBackground from "../components/VideoBackground";
@@ -9,6 +7,9 @@ import NewsTicker from "@/components/NewsTicker";
 import { newsArticles } from "@/data/newsData";
 import { User, TrendingUp, Rocket } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+// ✅ GLOBAL LANGUAGE
+import { useLanguage } from "@/components/Language";
+import { translateText } from "@/hooks/translate";
 
 const userTypes = [
   { id: "student", label: "Student", icon: User, desc: "Explainer-first content & simplified analysis" },
@@ -27,50 +28,103 @@ const roleStyles = {
 const HomePage = () => {
   const [selectedType, setSelectedType] = useState("investor");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [loading, setLoading] = useState(false);
+  const [displayNews, setDisplayNews] = useState<any[]>([]);
+  const [topCategory, setTopCategory] = useState<string | null>(null);
+
+  // ✅ GLOBAL LANGUAGE
+  const { lang } = useLanguage();
+
   const navigate = useNavigate();
+  const isLoggedIn = !!localStorage.getItem("token");
 
   useEffect(() => {
     const saved = localStorage.getItem("userType");
     if (saved) setSelectedType(saved);
   }, []);
 
+  // 🔥 MAIN LOGIC + TRANSLATION
+  useEffect(() => {
+    const run = async () => {
+      let baseData: any[] = [];
+
+      if (isLoggedIn) {
+        baseData = getRecommendedNews();
+      } else {
+        baseData =
+          selectedCategory === "All"
+            ? newsArticles
+            : newsArticles.filter((a) => a.category === selectedCategory);
+      }
+
+      // ✅ IF ENGLISH → NO TRANSLATION
+      if (lang === "en") {
+        setDisplayNews(baseData);
+        return;
+      }
+
+      // 🔥 TRANSLATE EVERYTHING
+      const translated = await Promise.all(
+        baseData.map(async (a) => ({
+          ...a,
+          title: await translateText(a.title, lang),
+          summary: await translateText(a.summary, lang),
+        }))
+      );
+
+      setDisplayNews(translated);
+    };
+
+    run();
+  }, [selectedCategory, selectedType, isLoggedIn, lang]);
+
   const handleRoleChange = (role: string) => {
     setSelectedType(role);
     localStorage.setItem("userType", role);
   };
 
-  const filtered =
-    selectedCategory === "All"
-      ? newsArticles
-      : newsArticles.filter((a) => a.category === selectedCategory);
+  const trackUserActivity = (article: any) => {
+    const history = JSON.parse(localStorage.getItem("history") || "[]");
 
-  // const handleGenerateBriefing = async (topic: string) => {
-  //   try {
-  //     setLoading(true);
+    history.push({
+      category: article.category,
+      title: article.title,
+    });
 
-  //     const userType = localStorage.getItem("userType") || "student";
+    localStorage.setItem("history", JSON.stringify(history));
+  };
 
-  //     const res = await fetch("http://localhost:5000/ai/briefing", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ topic, userType }),
-  //     });
+  const getRecommendedNews = () => {
+    const history = JSON.parse(localStorage.getItem("history") || "[]");
 
-  //     const data = await res.json();
+    if (history.length === 0) {
+      setTopCategory(null);
 
-  //     localStorage.setItem("briefing", data.briefing);
-  //     navigate("/briefings");
+      if (selectedType === "investor") {
+        return newsArticles.filter((a) => a.category === "Finance");
+      }
+      if (selectedType === "founder") {
+        return newsArticles.filter((a) => a.category === "Startup");
+      }
+      return newsArticles.filter((a) => a.category === "Tech");
+    }
 
-  //     setLoading(false);
-  //   } catch (err) {
-  //     console.error(err);
-  //     setLoading(false);
-  //   }
-  // };
+    const freq: any = {};
+
+    history.forEach((item: any) => {
+      freq[item.category] = (freq[item.category] || 0) + 1;
+    });
+
+    const top = Object.keys(freq).reduce((a, b) =>
+      freq[a] > freq[b] ? a : b
+    );
+
+    setTopCategory(top);
+
+    return newsArticles.filter((a) => a.category === top);
+  };
+
   const handleGenerateBriefing = (article: any) => {
+    trackUserActivity(article);
     navigate(`/news/${article.id}/briefing`);
   };
 
@@ -80,11 +134,10 @@ const HomePage = () => {
 
       {/* HERO */}
       <section className="relative min-h-[65vh] flex flex-col justify-center pt-10">
-        <VideoBackground  />
+        <VideoBackground />
         <NewsTicker />
 
         <div className="relative z-10 max-w-6xl mx-auto px-4 py-10 text-center">
-
           <span className="inline-block px-4 py-1.5 rounded-full text-xs border border-gold/30 text-gold mb-4">
             AI-Powered News Platform
           </span>
@@ -107,90 +160,41 @@ const HomePage = () => {
                 <button
                   key={type.id}
                   onClick={() => handleRoleChange(type.id)}
-                  className={`flex items-center gap-3 px-5 py-3 rounded-xl ${active ? "glass border-gold" : "glass"
-                    }`}
+                  className={`flex items-center gap-3 px-5 py-3 rounded-xl ${
+                    active ? "glass border-gold" : "glass"
+                  }`}
                 >
                   <Icon className={active ? "text-gold" : ""} />
                   <div>
                     <div>{type.label}</div>
-                    <div className="text-xs text-muted-foreground">{type.desc}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {type.desc}
+                    </div>
                   </div>
                 </button>
               );
             })}
-          </div>
-
-          {/* VIEWING TEXT */}
-          <div className="mt-2 text-sm text-muted-foreground">
-            Viewing as <span className="text-gold capitalize">{selectedType}</span>
           </div>
         </div>
       </section>
 
       {/* NEWS */}
       <section className="py-10">
-        <VideoBackground  />
-
         <div className="max-w-6xl mx-auto px-4">
+          <div className="grid md:grid-cols-3 gap-5">
+            {displayNews.map((article, i) => (
+              <div key={article.id} className={`glass p-4 rounded-xl`}>
+                <NewsCard article={article} index={i} />
 
-          {/* TITLE */}
-          <div className="text-center mb-4">
-            <h2 className="text-3xl font-bold">
-              AI News Feed for{" "}
-              <span className="text-gold capitalize">{selectedType}</span>
-            </h2>
-
-            <span className="px-3 py-1 text-xs rounded-full bg-gold/10 text-gold border mt-1 inline-block">
-              ⚡ AI Personalized
-            </span>
-          </div>
-
-          {/* CATEGORY FILTER */}
-          <div className="flex justify-center gap-2 mb-6 flex-wrap">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-1 rounded-full ${selectedCategory === cat ? "bg-gold text-black" : "glass"
-                  }`}
-              >
-                {cat}
-              </button>
+                <button
+                  onClick={() => handleGenerateBriefing(article)}
+                  className="mt-3 text-gold text-sm"
+                >
+                  ✨ Generate AI Briefing
+                </button>
+              </div>
             ))}
           </div>
-
-          {/* LOADING */}
-          {loading && (
-            <p className="text-center text-gold mb-4">
-              ⏳ Generating AI insights...
-            </p>
-          )}
-
-          {/* NEWS GRID */}
-          {filtered.length === 0 ? (
-            <p className="text-center text-muted-foreground">
-              No news available
-            </p>
-          ) : (
-            <div className="grid md:grid-cols-3 gap-5">
-              {filtered.map((article, i) => (
-                <div
-                  key={article.id}
-                  className={`glass p-4 rounded-xl ${roleStyles[selectedType]}`}
-                >
-                  <NewsCard article={article} index={i} />
-
-                  <button
-                    // onClick={() => handleGenerateBriefing(article.title)}
-                    onClick={() => handleGenerateBriefing(article)}
-                    className="mt-3 text-gold text-sm"
-                  >
-                    ✨ Generate AI Briefing
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       </section>
     </div>

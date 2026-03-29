@@ -1,27 +1,18 @@
 import { motion } from "framer-motion";
-import AnimatedBackground from "./AnimatedBackground";
-import { GitBranch, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { newsArticles } from "@/data/newsData";
 import { useEffect, useState } from "react";
 
-const sentimentIcon = {
-  positive: <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />,
-  negative: <TrendingDown className="w-3.5 h-3.5 text-red-400" />,
-  neutral: <Minus className="w-3.5 h-3.5 text-muted-foreground" />,
-};
+const StoryArcSection = () => {
+  const { id } = useParams();
 
-const sentimentColor = {
-  positive: "border-emerald-400/30",
-  negative: "border-red-400/30",
-  neutral: "border-muted-foreground/20",
-};
+  // ✅ SAFE MATCH (string/number issue fixed)
+  const article = newsArticles.find(
+    (a) => String(a.id) === String(id)
+  );
 
-const sentimentDot = {
-  positive: "bg-emerald-400",
-  negative: "bg-red-400",
-  neutral: "bg-muted-foreground",
-};
+  const [story, setStory] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
 
 const StoryArcSection = () => {
   const { id } = useParams();
@@ -80,27 +71,18 @@ const StoryArcSection = () => {
   };
 
   return (
-    // <section id="tracker" className="relative py-32 px-6">
-    <section className="relative py-12 px-6">
-      {/* <AnimatedBackground variant="storyarc" /> */}
+    <section className="py-12 px-6">
+      <div className="max-w-4xl mx-auto">
 
-      <div className="relative z-10 max-w-5xl mx-auto">
         {/* HEADER */}
         <motion.div
           className="text-center mb-8"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
         >
-          <span className="inline-block px-4 py-1.5 rounded-full text-xs border border-electric/30 text-electric mb-6">
-            Story Arc Tracker
-          </span>
-
-          <h2 className="text-4xl md:text-6xl font-bold mb-4">
-            Track Any <span className="text-gradient-electric">Story</span>
-          </h2>
-
-          <p className="text-muted-foreground text-lg">
-            Interactive timeline powered by AI insights
+          <h2 className="text-3xl font-bold">📊 Story Arc</h2>
+          <p className="text-muted-foreground mt-2">
+            {article?.title}
           </p>
         </motion.div>
 
@@ -123,6 +105,7 @@ const StoryArcSection = () => {
               AI Analysis
             </span>
           </div>
+        )}
 
           <div className="flex justify-center mb-6">
             <button
