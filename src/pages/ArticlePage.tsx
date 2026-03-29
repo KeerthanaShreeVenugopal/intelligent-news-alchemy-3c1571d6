@@ -5,13 +5,14 @@ import { useState, useEffect } from "react";
 import ArticleTabs from "@/components/ArticleTabs";
 import Navbar from "@/components/Navbar";
 import { newsArticles, categoryColors } from "@/data/newsData";
+
 // ✅ GLOBAL LANGUAGE
 import { useLanguage } from "@/components/Language";
 import { translateText } from "@/hooks/translate";
 
 const ArticlePage = () => {
   const { id } = useParams();
-  const { lang } = useLanguage(); // ✅ USE GLOBAL LANG
+  const { lang } = useLanguage();
 
   const article = newsArticles.find(
     (a) => String(a.id) === String(id)
@@ -42,7 +43,7 @@ const ArticlePage = () => {
     );
   }
 
-  // 🔥 GLOBAL TRANSLATION (AUTO)
+  // 🔥 GLOBAL TRANSLATION
   useEffect(() => {
     const run = async () => {
       if (lang === "en") {
@@ -103,7 +104,7 @@ const ArticlePage = () => {
           <ArticleTabs />
 
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            
+
             {/* CATEGORY */}
             <div className="flex gap-3 mb-4">
               <span className={`px-3 py-1 text-xs border ${categoryColors[article.category]}`}>
@@ -115,11 +116,21 @@ const ArticlePage = () => {
               <span className="text-xs">{article.date}</span>
             </div>
 
+            {/* 🔥 IMAGE (ADDED) */}
+            {article.image && (
+              <img
+                src={article.image}
+                alt={article.title}
+                className="w-full h-64 object-cover rounded-lg mb-6"
+              />
+            )}
+
             {/* TITLE */}
             <h1 className="text-3xl font-bold mb-4">
               {translatedData.title || article.title}
             </h1>
 
+            {/* AUTHOR */}
             <div className="flex gap-2 text-sm mb-6">
               <User size={14} /> {article.author}
             </div>
