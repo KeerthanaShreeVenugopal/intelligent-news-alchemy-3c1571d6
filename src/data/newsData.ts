@@ -62,6 +62,7 @@ export const newsArticles: NewsArticle[] = [
     date: "2026-03-29T13:30:00",
     readTime: "4 min",
     author: "Global Desk",
+    image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl6s_s2jB-7d1dBihdYHPQvBDR_V1E8ERi2Q&s",
 
     story: {
       timeline: [
@@ -180,7 +181,7 @@ export const newsArticles: NewsArticle[] = [
       ],
 
       prediction: "Tensions may continue impacting global markets and trade.",
-      contrarian: "Despite tensions, diplomacy and economic ties may prevent large-scale conflict.",
+      contrarian: "Despite tensions, diplo  macy and economic ties may prevent large-scale conflict.",
       briefing: {
         insights: [
           "Military activity is increasing across multiple regions",

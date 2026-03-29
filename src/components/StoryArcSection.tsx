@@ -2,17 +2,25 @@ import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
 import { newsArticles } from "@/data/newsData";
 import { useEffect, useState } from "react";
+import { GitBranch } from "lucide-react";
 
-const StoryArcSection = () => {
-  const { id } = useParams();
+const sentimentDot = {
+  positive: "bg-emerald-400",
+  neutral: "bg-gray-400",
+  negative: "bg-red-400",
+};
 
-  // ✅ SAFE MATCH (string/number issue fixed)
-  const article = newsArticles.find(
-    (a) => String(a.id) === String(id)
-  );
+const sentimentColor = {
+  positive: "border-emerald-400/30",
+  neutral: "border-gray-400/30",
+  negative: "border-red-400/30",
+};
 
-  const [story, setStory] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
+const sentimentIcon = {
+  positive: "😊",
+  neutral: "😐",
+  negative: "😡",
+};
 
 const StoryArcSection = () => {
   const { id } = useParams();
@@ -26,6 +34,9 @@ const StoryArcSection = () => {
     negative: -1,
   };
 
+
+  const [story, setStory] = useState<any>(null);
+  // const [loading, setLoading] = useState(false);
   const sentimentTrend = timelineEvents.map((event) => ({
     value: sentimentScore[event.sentiment],
   }));
@@ -105,7 +116,7 @@ const StoryArcSection = () => {
               AI Analysis
             </span>
           </div>
-        )}
+
 
           <div className="flex justify-center mb-6">
             <button

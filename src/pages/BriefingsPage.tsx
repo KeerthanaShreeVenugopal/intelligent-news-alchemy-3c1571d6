@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import { useParams } from "react-router-dom";
 import { newsArticles } from "@/data/newsData";
 import ArticleTabs from "@/components/ArticleTabs";
+import VideoBackground from "@/components/VideoBackground";
 
 // ✅ GLOBAL LANGUAGE
 import { useLanguage } from "@/components/Language";
@@ -140,8 +141,7 @@ const BriefingsPage = () => {
         <VideoBackground variant="dashboard" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 py-10">
-      <section className="pt-20">
-        <div className="max-w-4xl mx-auto px-4 py-10">
+     
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
 
             <ArticleTabs />
@@ -240,7 +240,7 @@ const BriefingsPage = () => {
             </h1>
 
             {/* SUMMARY */}
-            <div className="glass p-6 rounded-xl mb-6">
+            {/* <div className="glass p-6 rounded-xl mb-6">
               <h2 className="text-gold font-bold mb-3">Summary</h2>
 
               <p className="text-sm whitespace-pre-wrap">
@@ -248,7 +248,7 @@ const BriefingsPage = () => {
                   ? "🌐 Translating..."
                   : translatedSummary || article.summary}
               </p>
-            </div> */}
+            </div>  */}
 
             {/* CHAT */}
             <div className="glass p-6 rounded-xl">

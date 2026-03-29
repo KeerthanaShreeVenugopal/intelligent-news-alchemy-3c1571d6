@@ -122,17 +122,28 @@ const ArticlePage = () => {
 
             {/* 🔥 IMAGE (ADDED) */}
             {article.image && (
-              <img
-                src={article.image}
-                alt={article.title}
-                className="w-full h-64 object-cover rounded-lg mb-6"
-              />
+              <div className="relative mb-6">
+                <img
+                  src={article.image || "/fallback.jpg"}
+                  onError={(e) => (e.currentTarget.src = "/fallback.jpg")}
+                  alt={article.title}
+                  className="w-full max-h-[400px] object-cover rounded-xl transition duration-500 hover:scale-105"
+                />
+
+                {/* Dark overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-xl" />
+
+                {/* Title on image */}
+                <h1 className="absolute bottom-4 left-4 text-white text-2xl font-bold">
+                  {translatedData.title || article.title}
+                </h1>
+              </div>
             )}
 
             {/* TITLE */}
-            <h1 className="text-3xl font-bold mb-4">
+            {/* <h1 className="text-3xl font-bold mb-4">
               {translatedData.title || article.title}
-            </h1>
+            </h1> */}
 
             {/* AUTHOR */}
             <div className="flex gap-2 text-sm mb-6">

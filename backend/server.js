@@ -226,32 +226,9 @@ ${article}
         });
     }
 
-    const data = await response.json();
+} );
+ 
 
-    const translatedText = data[0]
-      .map((item) => item[0])
-      .join("");
-
-    console.log("🌐 Translated:", translatedText);
-
-    res.json({ translatedText });
-
-  } catch (err) {
-    console.error("❌ TRANSLATE ERROR:", err);
-    res.status(500).json({ translatedText: "" });
-  }
-});
-
-// ==============================
-// 🧪 HEALTH CHECK
-// ==============================
-app.get("/", (req, res) => {
-  res.send("✅ Server running");
-});
-
-// ==============================
-// 🚀 START SERVER
-// ==============================
 const PORT = 5000;
 
 app.listen(PORT, () => {
