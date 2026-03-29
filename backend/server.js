@@ -1,183 +1,196 @@
-require("dotenv").config();
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import fetch from "node-fetch";
+import { GoogleGenAI } from "@google/genai";
 
-const express = require("express");
-const cors = require("cors");
-const fs = require("fs");
-const path = require("path");
-const fetch = require("node-fetch");
-const ffmpeg = require("fluent-ffmpeg");
+dotenv.config();
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-/* ------------------ EXISTING ROUTES ------------------ */
-app.use("/news", require("./routes/news"));
-app.use("/ai", require("./routes/ai"));
-
-/* ------------------ VIDEO SETUP ------------------ */
-const VIDEOS_DIR = path.join(__dirname, "videos");
-
-// Ensure videos directory ALWAYS exists
-if (!fs.existsSync(VIDEOS_DIR)) {
-  fs.mkdirSync(VIDEOS_DIR, { recursive: true });
+// ==============================
+// 🔑 CHECK API KEY
+// ==============================
+if (!process.env.GEMINI_API_KEY) {
+  console.error("❌ GEMINI_API_KEY missing in .env");
+  process.exit(1);
 }
 
-// Serve videos
-app.use("/videos", express.static(VIDEOS_DIR));
+// ==============================
+// 🤖 GEMINI SETUP
+// ==============================
+const ai = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY,
+});
 
-/* ------------------ SCRIPT GENERATION ------------------ */
-async function generateScript(article) {
+// ==============================
+// 🤖 AI AGENT (Q&A)
+// ==============================
+app.post("/ai-agent", async (req, res) => {
   try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "user",
-            content: `Convert this into a short engaging video script:\n\n${article}`,
-          },
-        ],
-      }),
-    });
+    const { article, question, userType } = req.body;
 
-    const data = await response.json();
-
-    if (!data.choices) {
-      console.warn("⚠️ OpenAI failed, using fallback script");
-      throw new Error("Fallback");
+    if (!article || !question) {
+      return res.status(400).json({ error: "Missing inputs" });
     }
 
-    return data.choices[0].message.content;
+    const prompt = `
+You are an AI news analyst.
 
-  } catch (err) {
-    console.warn("⚠️ Script fallback triggered");
+User Type: ${userType || "General"}
 
-    return `
-Breaking News!
-
+Article:
 ${article}
 
-This story is developing rapidly and experts are closely watching.
+Question:
+${question}
 
-Stay tuned for more updates.
-`;
-  }
+Return STRICT JSON:
+
+{
+  "points": ["point 1", "point 2", "point 3"]
 }
+`;
 
-/* ------------------ TEXT TO SPEECH ------------------ */
-async function generateVoice(script) {
-  const audioPath = path.join(VIDEOS_DIR, "audio.mp3");
-
-  // Ensure folder exists before writing
-  if (!fs.existsSync(VIDEOS_DIR)) {
-    fs.mkdirSync(VIDEOS_DIR, { recursive: true });
-  }
-
-  try {
-    const response = await fetch("https://api.openai.com/v1/audio/speech", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json",
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
       },
-      body: JSON.stringify({
-        model: "gpt-4o-mini-tts",
-        voice: "alloy",
-        input: script,
-      }),
     });
 
-    const buffer = await response.arrayBuffer();
-    fs.writeFileSync(audioPath, Buffer.from(buffer));
+    let parsed;
 
-    return audioPath;
-
-  } catch (err) {
-    console.warn("⚠️ TTS failed, creating dummy audio");
-
-    // create minimal dummy file
-    fs.writeFileSync(audioPath, Buffer.from([]));
-
-    return audioPath;
-  }
-}
-
-/* ------------------ VIDEO MERGE ------------------ */
-function mergeVideo(audioPath) {
-  return new Promise((resolve, reject) => {
-    const outputPath = path.join(VIDEOS_DIR, "final.mp4");
-
-    // ✅ Correct path to bg.mp4
-    const bgVideoPath = path.join(
-      __dirname,
-      "..",
-      "public",
-      "videos",
-      "bg.mp4"
-    );
-
-    console.log("🎬 Using BG video:", bgVideoPath);
-
-    if (!fs.existsSync(bgVideoPath)) {
-      return reject(new Error("❌ bg.mp4 not found at: " + bgVideoPath));
+    try {
+      const raw = response.candidates[0].content.parts[0].text;
+      parsed = JSON.parse(raw);
+    } catch {
+      parsed = { points: ["⚠️ AI parsing failed"] };
     }
 
-    ffmpeg()
-      .input(bgVideoPath)
-      .input(audioPath)
-      .outputOptions([
-        "-c:v libx264",
-        "-c:a aac",
-        "-shortest",
-      ])
-      .save(outputPath)
-      .on("end", () => {
-        console.log("✅ Video created:", outputPath);
-        resolve(outputPath);
-      })
-      .on("error", (err) => {
-        console.error("❌ FFmpeg error:", err);
-        reject(err);
-      });
-  });
-}
+    res.json({ answer: parsed });
 
-/* ------------------ MAIN ROUTE ------------------ */
-app.post("/api/generate-video", async (req, res) => {
+  } catch (err) {
+    console.error("❌ AI ERROR:", err);
+    res.status(500).json({ error: "AI failed" });
+  }
+});
+
+// ==============================
+// 📊 STORY GENERATION
+// ==============================
+app.post("/ai-story", async (req, res) => {
   try {
     const { article } = req.body;
 
     if (!article) {
-      return res.status(400).json({ error: "Article is required" });
+      return res.status(400).json({ error: "Missing article" });
     }
 
-    console.log("🧠 Generating script...");
-    const script = await generateScript(article);
+    const prompt = `
+Generate SHORT story arc in JSON.
 
-    console.log("🎙️ Generating voice...");
-    const audioPath = await generateVoice(script);
+{
+  "timeline": [],
+  "keyPlayers": [],
+  "prediction": ""
+}
 
-    console.log("🎞️ Merging video...");
-    await mergeVideo(audioPath);
+Article:
+${article}
+`;
 
-    res.json({
-      videoUrl: "videos/final.mp4",
-      script,
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
     });
 
+    let parsed;
+
+    try {
+      let raw = response.candidates[0].content.parts[0].text;
+
+      raw = raw.replace(/```json/g, "").replace(/```/g, "").trim();
+
+      const start = raw.indexOf("{");
+      const end = raw.lastIndexOf("}");
+
+      if (start !== -1 && end !== -1) {
+        raw = raw.substring(start, end + 1);
+      }
+
+      parsed = JSON.parse(raw);
+    } catch {
+      parsed = {
+        timeline: [],
+        keyPlayers: [],
+        prediction: "⚠️ Failed to generate story",
+      };
+    }
+
+    res.json({ data: parsed });
+
   } catch (err) {
-    console.error("❌ ERROR:", err.message);
-    res.status(500).json({ error: err.message });
+    console.error("❌ STORY ERROR:", err);
+    res.status(500).json({ error: "Story failed" });
   }
 });
 
-/* ------------------ START ------------------ */
-app.listen(5000, () => {
-  console.log("🚀 Server running on http://localhost:5000");
+// ==============================
+// 🌐 TRANSLATION (FIXED)
+// ==============================
+app.post("/translate", async (req, res) => {
+  try {
+    const { text, target } = req.body;
+
+    if (!text || !target) {
+      return res.status(400).json({ translatedText: "" });
+    }
+
+    const url =
+      "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=" +
+      target +
+      "&dt=t&q=" +
+      encodeURIComponent(text);
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("Translate API failed");
+    }
+
+    const data = await response.json();
+
+    const translatedText = data[0]
+      .map((item) => item[0])
+      .join("");
+
+    console.log("🌐 Translated:", translatedText);
+
+    res.json({ translatedText });
+
+  } catch (err) {
+    console.error("❌ TRANSLATE ERROR:", err);
+    res.status(500).json({ translatedText: "" });
+  }
+});
+
+// ==============================
+// 🧪 HEALTH CHECK
+// ==============================
+app.get("/", (req, res) => {
+  res.send("✅ Server running");
+});
+
+// ==============================
+// 🚀 START SERVER
+// ==============================
+const PORT = 5000;
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });

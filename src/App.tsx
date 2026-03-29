@@ -15,44 +15,42 @@ import ProtectedRoute from "@/components/ProtectedRoute.tsx";
 import { AuthProvider } from "@/context/AuthContext";
 import GlobalBackground from "./components/GlobalBackground";
 
+import { LanguageProvider } from "./components/Language"; // ✅ ADDED
+
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AuthProvider>   {/* ✅ ADD THIS */}
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <GlobalBackground />
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            {/* <Route path="/article/:id" element={<ArticlePage />} /> */}
-            {/* <Route path="/briefings" element={<BriefingsPage />} />
-            <Route path="/story-tracker" element={<StoryTrackerPage />} />
-            <Route path="/video-studio" element={<VideoStudioPage />} /> */}
-            <Route path="/news/:id" element={<ArticlePage />} />
-            <Route path="/news/:id/briefing" element={<BriefingsPage />} />
-            <Route path="/news/:id/story" element={<StoryTrackerPage />} />
-            <Route path="/news/:id/video" element={<VideoStudioPage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="*" element={<NotFound />} />
+    <AuthProvider>
+      <LanguageProvider> {/* ✅ ADDED HERE */}
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <GlobalBackground />
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/news/:id" element={<ArticlePage />} />
+              <Route path="/news/:id/briefing" element={<BriefingsPage />} />
+              <Route path="/news/:id/story" element={<StoryTrackerPage />} />
+              <Route path="/news/:id/video" element={<VideoStudioPage />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="*" element={<NotFound />} />
 
-            {/* ✅ Protected Route */}
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <ProfilePage />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>   {/* ✅ ADD THIS */}
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </LanguageProvider> {/* ✅ ADDED HERE */}
+    </AuthProvider>
   </QueryClientProvider>
 );
 
 export default App;
-//

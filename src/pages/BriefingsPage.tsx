@@ -1,80 +1,142 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Send } from "lucide-react";
-import VideoBackground from "@/components/VideoBackground";
 import Navbar from "@/components/Navbar";
-// import { useParams, Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { newsArticles } from "@/data/newsData";
 import ArticleTabs from "@/components/ArticleTabs";
 
+// ✅ GLOBAL LANGUAGE
+import { useLanguage } from "@/components/Language";
+import { translateText } from "@/hooks/translate";
+
 const BriefingsPage = () => {
   const { id } = useParams();
-  const article = newsArticles.find((a) => a.id === id);
+  const { lang } = useLanguage();
+
+  const article = newsArticles.find((a) => String(a.id) === String(id));
+
+  if (!article) {
+    return <div className="text-center mt-20">Article not found</div>;
+  }
 
   const [followUp, setFollowUp] = useState("");
-  const [chatResponse, setChatResponse] = useState("");
+  const [chatResponse, setChatResponse] = useState<any>(null); // ✅ OBJECT
+  const [translatedChat, setTranslatedChat] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
 
-  // 🔥 HANDLE AI Q&A
-  const handleAsk = () => {
+  const [translatedSummary, setTranslatedSummary] = useState("");
+  const [loadingLang, setLoadingLang] = useState(false);
+
+  // 🔥 AI CHAT FIXED
+  const handleAsk = async () => {
     if (!followUp.trim()) return;
 
-    const question = followUp.toLowerCase();
-    let response = "";
+    setLoading(true);
 
-    if (question.includes("why")) {
-      response = article?.qa?.why || "No data available";
-    } else if (question.includes("impact")) {
-      response = article?.qa?.impact || "No data available";
-    } else if (question.includes("future")) {
-      response = article?.qa?.future || "No data available";
-    } else {
-      response =
-        article?.qa?.default ||
-        "Try asking about why, impact, or future.";
+    try {
+      const res = await fetch("http://localhost:5000/ai-agent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          article: article.content,
+          question: followUp,
+          userType: "Student",
+        }),
+      });
+
+      const data = await res.json();
+
+      // ✅ FIX: parse JSON properly
+      let parsed;
+
+      try {
+        parsed =
+          typeof data.answer === "string"
+            ? JSON.parse(data.answer)
+            : data.answer;
+      } catch {
+        parsed = { points: ["⚠️ Failed to parse AI response"] };
+      }
+
+      setChatResponse(parsed);
+      setFollowUp("");
+
+    } catch (err) {
+      console.error(err);
+      setChatResponse({ points: ["⚠️ AI failed. Try again."] });
     }
 
-    setChatResponse(response);
+    setLoading(false);
   };
+
+  // 🔥 TRANSLATE SUMMARY
+  useEffect(() => {
+    const run = async () => {
+      if (lang === "en") {
+        setTranslatedSummary("");
+        return;
+      }
+
+      setLoadingLang(true);
+
+      const translated = await translateText(article.summary, lang);
+      setTranslatedSummary(translated);
+
+      setLoadingLang(false);
+    };
+
+    run();
+  }, [lang, article.summary]);
+
+  // 🔥 TRANSLATE CHAT POINTS
+  useEffect(() => {
+    const run = async () => {
+      if (lang === "en") {
+        setTranslatedChat(null);
+        return;
+      }
+
+      if (!chatResponse?.points) return;
+
+      const translatedPoints = await Promise.all(
+        chatResponse.points.map((p: string) =>
+          translateText(p, lang)
+        )
+      );
+
+      setTranslatedChat({ points: translatedPoints });
+    };
+
+    run();
+  }, [lang, chatResponse]);
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      <section className="relative min-h-screen pt-20">
-        <VideoBackground variant="dashboard" />
-
-        <div className="relative z-10 max-w-4xl mx-auto px-4 py-10">
+      <section className="pt-20">
+        <div className="max-w-4xl mx-auto px-4 py-10">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
 
-           
-
-            {/* NAV TABS */}
             <ArticleTabs />
-            {/* 🔥 AI SUMMARY */}
 
-             {/* TITLE */}
-             <h1 className="text-4xl font-bold mb-6 text-center">
+            <h1 className="text-4xl font-bold mb-6 text-center">
               🧠 AI Briefing
             </h1>
-            
+
+            {/* SUMMARY */}
             <div className="glass p-6 rounded-xl mb-6">
               <h2 className="text-gold font-bold mb-3">Summary</h2>
 
               <p className="text-sm whitespace-pre-wrap">
-                {`🧠 AI Insight:
-
-${article?.summary}
-
-📊 Sector Impact:
-This affects the ${article?.category} sector significantly.
-
-⚡ Key Takeaway:
-This is an important trend to watch closely.`}
+                {loadingLang
+                  ? "🌐 Translating..."
+                  : translatedSummary || article.summary}
               </p>
             </div>
 
-            {/* 💬 AI CHAT */}
+            {/* CHAT */}
             <div className="glass p-6 rounded-xl">
               <h3 className="mb-3">Ask AI</h3>
 
@@ -82,33 +144,43 @@ This is an important trend to watch closely.`}
                 <input
                   value={followUp}
                   onChange={(e) => setFollowUp(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleAsk()}
                   className="flex-1 px-4 py-2 rounded-lg bg-secondary"
                   placeholder="Ask: why, impact, future..."
                 />
 
                 <button
                   onClick={handleAsk}
-                  className="bg-gold px-4 rounded-lg"
+                  disabled={loading}
+                  className="bg-gold px-4 rounded-lg disabled:opacity-50"
                 >
                   <Send size={16} />
                 </button>
               </div>
 
-              {/* 🔥 SUGGESTIONS */}
-              <p className="text-xs text-muted-foreground mt-2">
-                Try: "Why?", "Impact?", "Future?"
-              </p>
+              {loading && (
+                <p className="text-sm text-muted-foreground mt-3">
+                  🤖 Thinking...
+                </p>
+              )}
 
-              {/* RESPONSE */}
-              {chatResponse && (
+              {/* ✅ FIXED DISPLAY */}
+              {(translatedChat || chatResponse) && (
                 <motion.div
-                  className="mt-4 p-3 rounded-lg bg-secondary/40"
+                  className="mt-4 p-4 rounded-lg bg-secondary/40"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                 >
-                  <p className="text-sm">{chatResponse}</p>
+                  <div className="space-y-2 text-sm">
+                    {(translatedChat?.points || chatResponse?.points || []).map(
+                      (point: string, i: number) => (
+                        <p key={i}>• {point}</p>
+                      )
+                    )}
+                  </div>
                 </motion.div>
               )}
+
             </div>
 
           </motion.div>

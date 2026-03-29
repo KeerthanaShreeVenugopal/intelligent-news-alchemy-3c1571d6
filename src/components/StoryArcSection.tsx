@@ -1,138 +1,157 @@
 import { motion } from "framer-motion";
-import AnimatedBackground from "./AnimatedBackground";
-import { GitBranch, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { newsArticles } from "@/data/newsData";
-
-const sentimentIcon = {
-  positive: <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />,
-  negative: <TrendingDown className="w-3.5 h-3.5 text-red-400" />,
-  neutral: <Minus className="w-3.5 h-3.5 text-muted-foreground" />,
-};
-
-const sentimentColor = {
-  positive: "border-emerald-400/30",
-  negative: "border-red-400/30",
-  neutral: "border-muted-foreground/20",
-};
-
-const sentimentDot = {
-  positive: "bg-emerald-400",
-  negative: "bg-red-400",
-  neutral: "bg-muted-foreground",
-};
+import { useState } from "react";
 
 const StoryArcSection = () => {
   const { id } = useParams();
-  const article = newsArticles.find((a) => a.id === id);
 
-  // ✅ FETCH FROM newsData.ts
-  const timelineEvents = article?.story?.timeline || [];
+  // ✅ SAFE MATCH (string/number issue fixed)
+  const article = newsArticles.find(
+    (a) => String(a.id) === String(id)
+  );
+
+  const [story, setStory] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+
+  // 🔥 GENERATE STORY
+  const generateStory = async () => {
+    try {
+      if (!article) {
+        console.error("❌ Article not found");
+        return;
+      }
+
+      setLoading(true);
+
+      const res = await fetch("http://localhost:5000/ai-story", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          // ✅ LIMIT INPUT (IMPORTANT FIX)
+          article: (article.content || article.title).slice(0, 200),
+        }),
+      });
+
+      const data = await res.json();
+
+      console.log("API RESPONSE:", data);
+
+      setStory(data.data);
+      setLoading(false);
+    } catch (err) {
+      console.error("❌ ERROR:", err);
+      setLoading(false);
+    }
+  };
+
+  const timeline = story?.timeline || [];
 
   return (
-    // <section id="tracker" className="relative py-32 px-6">
-    <section className="relative py-12 px-6">
-      {/* <AnimatedBackground variant="storyarc" /> */}
+    <section className="py-12 px-6">
+      <div className="max-w-4xl mx-auto">
 
-      <div className="relative z-10 max-w-5xl mx-auto">
         {/* HEADER */}
         <motion.div
           className="text-center mb-8"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
         >
-          <span className="inline-block px-4 py-1.5 rounded-full text-xs border border-electric/30 text-electric mb-6">
-            Story Arc Tracker
-          </span>
-
-          <h2 className="text-4xl md:text-6xl font-bold mb-4">
-            Track Any <span className="text-gradient-electric">Story</span>
-          </h2>
-
-          <p className="text-muted-foreground text-lg">
-            Interactive timeline powered by AI insights
+          <h2 className="text-3xl font-bold">📊 Story Arc</h2>
+          <p className="text-muted-foreground mt-2">
+            {article?.title}
           </p>
         </motion.div>
 
-        {/* CARD */}
-        <motion.div
-          className="rounded-2xl glass-strong p-6 md:p-8"
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          {/* TITLE */}
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-3">
-              <GitBranch className="w-5 h-5 text-electric" />
-              <h3 className="text-lg font-bold">
-                {article?.title}
-              </h3>
-            </div>
-
-            <span className="text-xs px-3 py-1 rounded-full bg-emerald-400/10 text-emerald-400">
-              AI Analysis
-            </span>
+        {/* BUTTON */}
+        {!story && !loading && (
+          <div className="text-center">
+            <button
+              onClick={generateStory}
+              className="bg-gold px-5 py-2 rounded-lg"
+            >
+              🚀 Generate AI Story
+            </button>
           </div>
+        )}
 
-          {/* 🔥 EMPTY STATE */}
-          {timelineEvents.length === 0 && (
-            <p className="text-center text-muted-foreground">
-              No story data available
+        {/* LOADING */}
+        {loading && (
+          <div className="text-center mt-6">
+            <p>🧠 AI analyzing story...</p>
+            <p>📊 Building timeline...</p>
+            <p>🔮 Predicting future...</p>
+          </div>
+        )}
+
+        {/* ERROR */}
+        {story && timeline.length === 0 && (
+          <p className="text-center text-red-400 mt-6">
+            {story.prediction}
+          </p>
+        )}
+
+        {/* TIMELINE */}
+        {timeline.length > 0 && (
+          <div className="mt-8 space-y-4">
+            {timeline.map((event: any, i: number) => (
+              <motion.div
+                key={i}
+                className="p-4 bg-secondary rounded-xl border"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <div className="flex justify-between text-xs text-muted-foreground">
+                  <span>{event.date}</span>
+                  <span>
+                    {event.sentiment === "positive"
+                      ? "📈"
+                      : event.sentiment === "negative"
+                      ? "📉"
+                      : "➖"}
+                  </span>
+                </div>
+
+                <h3 className="font-bold mt-1">{event.title}</h3>
+                <p className="text-sm">{event.detail}</p>
+              </motion.div>
+            ))}
+          </div>
+        )}
+
+        {/* KEY PLAYERS */}
+        {story?.keyPlayers?.length > 0 && (
+          <div className="mt-8">
+            <h3 className="font-bold mb-2">👥 Key Players</h3>
+            {story.keyPlayers.map((p: any, i: number) => (
+              <div key={i} className="text-sm">
+                {p.name} — {p.role}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* PREDICTION */}
+        {story?.prediction && timeline.length > 0 && (
+          <div className="mt-8 p-4 border rounded-xl">
+            <h3 className="font-bold">🔮 What Next?</h3>
+            <p className="text-sm mt-2">{story.prediction}</p>
+          </div>
+        )}
+
+        {/* 🔥 BONUS FEATURE (WINNER) */}
+        {timeline.length > 0 && (
+          <div className="mt-6 p-4 bg-secondary rounded-xl">
+            <h3 className="font-bold text-gold">💡 Why this matters</h3>
+            <p className="text-sm mt-2">
+              This news impacts market trends, investment decisions,
+              and future growth opportunities.
             </p>
-          )}
-
-          {/* TIMELINE */}
-          <div className="relative">
-            <div className="absolute left-4 top-0 bottom-0 w-px bg-border/50" />
-
-            <div className="space-y-6">
-              {timelineEvents.map((event, i) => (
-                <motion.div
-                  key={i}
-                  className="relative pl-10"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                >
-                  {/* DOT */}
-                  <div
-                    className={`absolute left-[11px] top-2 w-2.5 h-2.5 rounded-full ${
-                      sentimentDot[event.sentiment]
-                    }`}
-                  />
-
-                  {/* CARD */}
-                  <div
-                    className={`p-4 rounded-xl bg-secondary/30 border ${
-                      sentimentColor[event.sentiment]
-                    }`}
-                  >
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs text-muted-foreground">
-                        {event.date}
-                      </span>
-                      {sentimentIcon[event.sentiment]}
-                    </div>
-
-                    <p className="text-sm font-medium">{event.title}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {event.detail}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
           </div>
+        )}
 
-          {/* 🔮 PREDICTION */}
-          <div className="mt-8 p-4 rounded-xl border border-gold/20">
-            <p className="text-xs text-gold mb-2">🔮 What to Watch Next</p>
-
-            <p className="text-sm text-muted-foreground">
-              {article?.story?.prediction || "No prediction available"}
-            </p>
-          </div>
-        </motion.div>
       </div>
     </section>
   );
