@@ -18,3 +18,4 @@ export default function GlobalBackground() {
     </div>
   );
 }
+//

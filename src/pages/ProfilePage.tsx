@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { User, TrendingUp, Rocket, Save, Check } from "lucide-react";
-import VideoBackground from "@/components/VideoBackground";
+import VideoBackground from "../components/VideoBackground";
 import Navbar from "@/components/Navbar";
 
 const userTypes = [
@@ -37,7 +37,7 @@ const ProfilePage = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <section className="relative min-h-screen pt-20">
-        <VideoBackground variant="dashboard" />
+        <VideoBackground  />
 
         <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
