@@ -164,6 +164,78 @@ User → Select Article
 Article → AI Script Generation → Voice (TTS)
        → Slide Rendering → Video Output
 ```
+## 🏗️ System Architecture
+
+```mermaid
+flowchart TD
+    A[User] --> B[React Frontend]
+
+    B --> C[Node Backend - Express API]
+
+    C --> D[Gemini AI]
+    C --> E[Translation API]
+    C --> F[Video Generator]
+
+    D --> G[Story Arc and Q&A]
+    E --> H[Vernacular Output]
+    F --> I[Video Output]
+
+    G --> B
+    H --> B
+    I --> B
+```
+---
+
+## 🔄 Data Flow
+
+```mermaid
+flowchart TD
+    A[User opens article] --> B[Frontend loads content]
+
+    B --> C{User Action}
+
+    C -->|📊 Story Arc| D[/ai-story/]
+    C -->|💬 Ask AI| E[/ai-agent/]
+    C -->|🌐 Translate| F[/translate/]
+    C -->|🎬 Video| G[/ai-video/]
+
+    D --> H[🧠 Gemini AI]
+    E --> H
+    F --> I[🌐 Translation API]
+    G --> J[🎬 Video Engine]
+
+    H --> K[Structured JSON]
+    I --> L[Translated Text]
+    J --> M[Video Output]
+
+    K --> B
+    L --> B
+    M --> B
+```
+
+---
+
+## 🚀 Feature Flow (Core Innovation)
+
+```mermaid
+flowchart TD
+    A[📰 Article Input] --> B[⚙️ Backend Processing]
+
+    B --> C[📊 Story Arc Generator]
+    B --> D[💬 AI Q&A Engine]
+    B --> E[🌐 Vernacular Engine]
+    B --> F[🎬 Video Generator]
+
+    C --> G[Timeline UI]
+    D --> H[Chat Interface]
+    E --> I[Multi-language Content]
+    F --> J[AI Video Output]
+
+    G --> K[✨ User Experience]
+    H --> K
+    I --> K
+    J --> K
+```
 
 ---
 
@@ -263,8 +335,13 @@ POST /ai-video
 * 🧠 Knowledge graph for users
 * 🔗 Story linking across articles
 * ⚡ Multi-model AI routing
-
 ---
+
+
+## 🎯 One-Line Summary
+
+> “We built a system that converts news into **interactive intelligence** using AI, translation, and multimedia generation.”
+
 
 # 🎯 Problem Solved
 
